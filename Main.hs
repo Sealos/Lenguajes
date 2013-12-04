@@ -8,15 +8,22 @@ import qualified Data.Map as Map
 
 type Modelo = Map.Map [Evento] Int
 
+generarModelo :: [Evento] -> Modelo
+generarModelo x = Map.union (generarModeloCero x) (generarModeloUno x)
+
 --agregar :: Map.Map Evento Int -> Evento -> Map.Map Evento Int
-generarModelo :: [Evento] -> Int -> Modelo
--- Orden 0
-generarModelo x 0 = foldl agregar neutro x
+generarModeloCero :: [Evento] -> Modelo
+generarModeloCero x = foldl agregar neutro x
 	where
 		agregar m e = Map.insertWith (\x y -> y + 1) [e] 1 m
 		neutro = Map.fromList [([(0, 0)], length x)]
+
 -- Orden 1
-generarModelo x 1 = Map.empty
+generarModeloUno :: [Evento] -> Modelo
+generarModeloUno x = foldl agregar Map.empty lista
+	where
+		agregar m e = Map.insertWith (\x y -> y + 1) e 1 m
+		lista = zipWith (:) x (map (\y -> [y]) (tail x))
 
 -- Da la lista de eventos de la union entre 2 modelos
 unionEventos :: Modelo -> Modelo -> [[Evento]]
@@ -115,5 +122,5 @@ geteventos (a, _) = a
 
 main = do
 	a <- loadMusicXmls directorio
-	putStrLn $ show $ fst a
-	putStrLn $ show (generarModelo (head(fst a)) 0)
+	putStrLn $ show $ head (fst a)
+	putStrLn $ show (generarModelo (head(fst a)))
