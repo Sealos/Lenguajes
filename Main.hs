@@ -6,16 +6,31 @@ import Data.List as List
 import Data.Function
 import qualified Data.Map as Map
 
-type Modelo = Map.Map Evento Int
+type Modelo = Map.Map [Evento] Int
 
--- agregar :: Map.Map Evento Int -> Evento -> Map.Map Evento Int
-generarModelo :: [Evento] -> Modelo
-generarModelo = foldl agregar Map.empty
-	where agregar m e = Map.insertWith (\x y -> y + 1) e 0 m
+--agregar :: Map.Map Evento Int -> Evento -> Map.Map Evento Int
+generarModelo :: [Evento] -> Int -> Modelo
+-- Orden 0
+generarModelo x 0 = foldl agregar neutro x
+	where
+		agregar m e = Map.insertWith (\x y -> y + 1) [e] 1 m
+		neutro = Map.fromList [([(0, 0)], length x)]
+-- Orden 1
+generarModelo x 1 = Map.empty
 
--- insertWith (\x y -> y + 1) Evento 0 Modelo
--- Ord k => (a -> a -> a) -> k -> a -> Map k a -> Map k a
--- insertWith (++) 5 "xxx" (fromList [(5,"a"), (3,"b")]) == fromList [(3, "b"), (5, "xxxa")]
+-- Da la lista de eventos de la union entre 2 modelos
+unionEventos :: Modelo -> Modelo -> [[Evento]]
+unionEventos a b = union (Map.keys a) (Map.keys b)
+
+-- Distancia entre modelos
+-- distancia :: Modelo -> Modelo -> Rational
+-- distancia a b = toRational $ sqrt $ foldl + 0 (obtenerValores a b)
+
+obtenerValores :: Modelo -> Modelo -> [Int]
+obtenerValores a b = [0]
+
+valor :: Modelo -> [Evento] -> Int
+valor m k = if ((fst(head k)) == 0) then 0 else Map.findWithDefault 0 k m
 
 {-
 concatAll s = foldr (++) [] s
@@ -29,8 +44,6 @@ prob0 s (x:xs) = (fromIntegral (snd x)) / (fromIntegral s): prob0 s xs
 pares [] = []
 pares xs = zip xs (tail xs)
 -}
-
---generarModelo
 
 -- Directorio predeterminado
 directorio :: String
@@ -102,5 +115,5 @@ geteventos (a, _) = a
 
 main = do
 	a <- loadMusicXmls directorio
-	putStrLn $ show (fst a)
-	putStrLn "Hola"
+	putStrLn $ show $ fst a
+	putStrLn $ show (generarModelo (head(fst a)) 0)
