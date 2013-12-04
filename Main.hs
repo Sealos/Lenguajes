@@ -30,11 +30,13 @@ unionEventos :: Modelo -> Modelo -> [[Evento]]
 unionEventos a b = union (Map.keys a) (Map.keys b)
 
 -- Distancia entre modelos
--- distancia :: Modelo -> Modelo -> Rational
--- distancia a b = toRational $ sqrt $ foldl + 0 (obtenerValores a b)
+distancia :: Modelo -> Modelo -> Float
+distancia a b = sqrt $ fromIntegral $ obtenerValores a b 
 
-obtenerValores :: Modelo -> Modelo -> [Int]
-obtenerValores a b = [0]
+obtenerValores :: Modelo -> Modelo -> Int
+obtenerValores a b = foldl (+) 0 $ zipWith (\x y-> (y - x)*(y - x)) (map (valor b) eventos) (map (valor a) eventos)
+	where
+		eventos = unionEventos a b
 
 valor :: Modelo -> [Evento] -> Int
 valor m k = if ((fst(head k)) == 0) then 0 else Map.findWithDefault 0 k m
@@ -122,5 +124,14 @@ geteventos (a, _) = a
 
 main = do
 	a <- loadMusicXmls directorio
-	putStrLn $ show $ head (fst a)
-	putStrLn $ show (generarModelo (head(fst a)))
+	let b = fst a
+	let c = head b
+	let d = head (tail b)
+	putStrLn $ show "Modelo 1"
+	putStrLn $ show (generarModelo c)
+	putStrLn $ show "Modelo 2"
+	putStrLn $ show (generarModelo d)
+	putStrLn $ show "Union de claves"
+	putStrLn $ show (unionEventos (generarModelo c) (generarModelo d))
+	putStrLn $ show "Resultado"
+	putStrLn $ show (distancia (generarModelo c) (generarModelo d))
