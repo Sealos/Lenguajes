@@ -2,11 +2,20 @@ module Main where
 import Prelude hiding (init)
 import Input
 import Euterpea hiding (Event)
-import Data.List
+import Data.List as List
 import Data.Function
 import qualified Data.Map as Map
 
-type Modelo = Map.Map
+type Modelo = Map.Map Evento Int
+
+-- agregar :: Map.Map Evento Int -> Evento -> Map.Map Evento Int
+generarModelo :: [Evento] -> Modelo
+generarModelo = foldl agregar Map.empty
+	where agregar m e = Map.insertWith (\x y -> y + 1) e 0 m
+
+-- insertWith (\x y -> y + 1) Evento 0 Modelo
+-- Ord k => (a -> a -> a) -> k -> a -> Map k a -> Map k a
+-- insertWith (++) 5 "xxx" (fromList [(5,"a"), (3,"b")]) == fromList [(3, "b"), (5, "xxxa")]
 
 {-
 concatAll s = foldr (++) [] s
