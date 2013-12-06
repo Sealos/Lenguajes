@@ -7,6 +7,7 @@ import Data.Function
 import qualified Data.Map as Map
 
 type Modelo = Map.Map [Evento] Int
+type ModeloD = Map.Map [Evento] Float
 
 generarModelo :: [Evento] -> Modelo
 generarModelo x = Map.union (generarModeloCero x) (generarModeloUno x)
@@ -40,6 +41,7 @@ obtenerValores a b = foldl (+) 0 $ zipWith (\x y-> (y - x)*(y - x)) (map (valor 
 
 valor :: Modelo -> [Evento] -> Int
 valor m k = if ((fst(head k)) == 0) then 0 else Map.findWithDefault 0 k m
+
 
 {-
 concatAll s = foldr (++) [] s
@@ -127,11 +129,14 @@ main = do
 	let b = fst a
 	let c = head b
 	let d = head (tail b)
+	putStrLn $ show a
 	putStrLn $ show "Modelo 1"
 	putStrLn $ show (generarModelo c)
 	putStrLn $ show "Modelo 2"
 	putStrLn $ show (generarModelo d)
 	putStrLn $ show "Union de claves"
 	putStrLn $ show (unionEventos (generarModelo c) (generarModelo d))
-	putStrLn $ show "Resultado"
+	putStrLn $ show "Distancia"
 	putStrLn $ show (distancia (generarModelo c) (generarModelo d))
+	putStrLn $ show "Modelo normalizado c"
+--	putStrLn $ show normalizarModelo $ (generarModelo c)
