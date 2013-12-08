@@ -41,6 +41,9 @@ generarModeloUno x = foldl agregar Map.empty lista
 unionEventos :: Modelo -> Modelo -> [[Evento]]
 unionEventos a b = union (Map.keys a) (Map.keys b)
 
+unirModelos :: Modelo -> Modelo -> Modelo
+unirModelos a b = Map.unionWith (+) a b
+
 -- Distancia entre modelos
 distancia :: Modelo -> Modelo -> Float
 distancia a b = sqrt $ fromIntegral $ obtenerValores a b 
@@ -52,20 +55,6 @@ obtenerValores a b = foldl (+) 0 $ zipWith (\x y-> (y - x)*(y - x)) (map (valor 
 
 valor :: Modelo -> [Evento] -> Int
 valor m k = if ((fst(head k)) == 0) then 0 else Map.findWithDefault 0 k m
-
-
-{-
-concatAll s = foldr (++) [] s
-contador s = map (\x->(head x, length x)) . group . sort $ s
-contadorAll s = map contador s
-
-prob0 s [] = []
-prob0 s [x] = [(fromIntegral (snd x)) / (fromIntegral s)]
-prob0 s (x:xs) = (fromIntegral (snd x)) / (fromIntegral s): prob0 s xs
-
-pares [] = []
-pares xs = zip xs (tail xs)
--}
 
 -- Directorio predeterminado
 directorio :: String
@@ -81,18 +70,23 @@ longitud = 50
 	nueva a partir de este modelo, la imprime por pantalla y la
 	reproduce.
 -}
-{-
+--0,3 · p M (e n |()) + 0,7 · p M (e n |e n−1 )
+--listaProb :: Modelo -> Evento -> [([Evento], Float)]
+--listaProb m (0,0) = filter (\x -> length (fst x) == 1) toList m
+--listaProb m ev = 
+
 componer :: IO ()
 componer = componer' directorio
 
 componer' :: String -> IO ()
 componer' dir = do
-	(seqs, filenames) <- loadMusicXmls dir
-	-- let modelo = ...
+	(seqs, filenames) <- loadMusicXmls directorio
+	let modelo = foldl (\x y -> unirModelos x (generarModelo y)) Map.empty seqs
+	putStrLn $ show modelo
 	-- let composicion = ...
-	putStrLn $ show composicion
-	play $ sequenceToMusic composicion
--}
+	--putStrLn $ show composicion
+	--play $ sequenceToMusic composicion
+
 {-
 	Recupera las diez secuencias más similares a la k-ésima secuencia
 	de la colección musical en el directorio por defecto, donde la
@@ -102,15 +96,20 @@ componer' dir = do
 	el número de la secuencia (relativo al orden alfabético de la
 	colección), el nombre de archivo y la distancia a la consulta.
 -}
-{-
+
 buscar :: Int -> IO ()
 buscar = buscar' directorio
-
 buscar' :: String -> Int -> IO ()
-buscar' dir = do
-seqfns <- loadMusicXmls dir
-	let seqfns_ordenados = unzip $ sortBy (compare ‘on‘ snd) $ zip seqfns
-	-- ...-}
+buscar' dir n = do
+  seqfns <- loadMusicXmls dir
+  let (seqs, filenames) = unzip $ sortBy (compare `on` snd) $ (uncurry zip) seqfns
+  let modelos= generarListaModelos seqs 
+  if (n > 0) && (n <= length seqs) then
+		
+		putStrLn $ (unlines (distancia10 n filenames modelos)) 
+
+    else
+      putStrLn "Indice fuera de rango"
 
 tocar :: Int -> IO ()
 tocar n = do
@@ -135,25 +134,5 @@ sequenceToMusic es = line $ map eventToNote es
 geteventos:: ([[Evento]], [String]) -> [[Evento]]
 geteventos (a, _) = a
 
-main = do
-	a <- loadMusicXmls directorio
-	let b = fst a
-	let c = head b
-	let d = head (tail b)
-	let x= generarListaModelos b
-	let y= snd a
-	--putStrLn $ show a
-	putStrLn $ show "Modelo 1"
-	putStrLn $ show (generarModelo c)
-	putStrLn $ show "Modelo 2"
-	putStrLn $ show (generarModelo d)
-	putStrLn $ show "Union de claves"
-	putStrLn $ show (unionEventos (generarModelo c) (generarModelo d))
-	putStrLn $ show "Distancia"
-	putStrLn $ show (distancia (generarModelo c) (generarModelo d))
-	putStrLn $ show "Modelo normalizado c"
-	putStrLn $ show "Introduzca numero de secuencia a comparar"
-	s<-getLine
-	putStrLn $ (unlines (distancia10 (read s) y x) )
-	putStrLn $ show "Distancias"	
---	putStrLn $ show normalizarModelo $ (generarModelo c)
+main :: IO ()
+main = componer
