@@ -70,16 +70,14 @@ longitud = 50
 	nueva a partir de este modelo, la imprime por pantalla y la
 	reproduce.
 -}
---0,3 · p M (e n |()) + 0,7 · p M (e n |e n−1 )
 listaProb :: Modelo -> Evento -> [([Evento], Double)]
-listaProb m (0,0) = map (\x -> (fst x, calcularProbabilidad m (fst x) (0,0))) listaOrdenUno
-listaProb m ev = map (\x -> (fst x, calcularProbabilidad m (fst x) ev)) listaOrdenDos
-	where
-		listaOrdenUno = filter (\x -> (length (fst x) == 1) && (fst x) /= [(0,0)]) $ Map.toList m
-		listaOrdenDos = filter (\x -> (length (fst x) == 2) && ((head (fst x)) == ev)) $ Map.toList m
+listaProb m (0,0) = map (\x -> (fst x, calcularProbabilidad m (head(fst x)) (0,0))) lista
+	where lista = filter (\x -> (length (fst x) == 1) && (fst x) /= [(0,0)]) $ Map.toList m
+listaProb m ev = map (\x -> (fst x, calcularProbabilidad m (head(fst x)) ev)) lista
+	where lista = filter (\x -> (length (fst x) == 2) && ((head (fst x)) == ev)) $ Map.toList m
 
 calcularProbabilidad :: Modelo -> Evento -> Evento -> Double
-calcularProbabilidad m ev (0,0) = 0.3*(fromIntegral (Map.findWithDefault 0 [ev]))/(fromIntegral (Map.findWithDefault 0 [(0,0)]))
+calcularProbabilidad m ev (0,0) = 0.3*((Map.findWithDefault 0 [ev]))/((Map.findWithDefault 0 [(0,0)]))
 calcularProbabilidad m ev evv = calcularProbabilidad m ev (0,0) + 0.7*(fromIntegral (Map.findWithDefault 0 [evv, ev]))/(fromIntegral (Map.findWithDefault 0 [evv]))
 
 componer :: IO ()
