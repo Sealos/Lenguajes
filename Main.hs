@@ -87,7 +87,7 @@ componer' dir = do
 	el número de la secuencia (relativo al orden alfabético de la
 	colección), el nombre de archivo y la distancia a la consulta.
 -}
-{-
+
 buscar :: Int -> IO ()
 buscar = buscar' directorio
   
@@ -95,10 +95,13 @@ buscar' :: String -> Int -> IO ()
 buscar' dir n = do
   seqfns <- loadMusicXmls dir
   let (seqs, filenames) = unzip $ sortBy (compare `on` snd) $ (uncurry zip) seqfns
+  let modelos= generarListaModelos seqs 
   if (n > 0) && (n <= length seqs) then
-    -- ...
+		
+		putStrLn $ (unlines (distancia10 n filenames modelos)) 
+
     else
-      putStrLn "Indice fuera de rango"-}
+      putStrLn "Indice fuera de rango"
 
 tocar :: Int -> IO ()
 tocar n = do
