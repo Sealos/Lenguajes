@@ -6,11 +6,22 @@ import Data.List as List
 import Data.Function
 import qualified Data.Map as Map
 
+
 type Modelo = Map.Map [Evento] Int
 type ModeloD = Map.Map [Evento] Float
 
 generarModelo :: [Evento] -> Modelo
 generarModelo x = Map.union (generarModeloCero x) (generarModeloUno x)
+
+generarListaModelos :: [[Evento]] -> [Modelo]
+generarListaModelos x= map (generarModelo) x
+
+distancia10 :: Int->[String]->[Modelo]->[String]
+distancia10 e y x= map (parsearTupla) (take 10 $ sortBy (compare `on` snd) ( zip (zip [0..] (map (drop 6) y)) (map (distancia ((!!) x e)) x)))
+
+parsearTupla :: ((Int,String),Float) -> String
+parsearTupla x=   ((((show (fst (fst x)) ++ "  ") ++ "  ") ++ (snd (fst x))) ++ "   ") ++ show (snd x)
+
 
 --agregar :: Map.Map Evento Int -> Evento -> Map.Map Evento Int
 generarModeloCero :: [Evento] -> Modelo
@@ -129,7 +140,9 @@ main = do
 	let b = fst a
 	let c = head b
 	let d = head (tail b)
-	putStrLn $ show a
+	let x= generarListaModelos b
+	let y= snd a
+	--putStrLn $ show a
 	putStrLn $ show "Modelo 1"
 	putStrLn $ show (generarModelo c)
 	putStrLn $ show "Modelo 2"
@@ -139,4 +152,8 @@ main = do
 	putStrLn $ show "Distancia"
 	putStrLn $ show (distancia (generarModelo c) (generarModelo d))
 	putStrLn $ show "Modelo normalizado c"
+	putStrLn $ show "Introduzca numero de secuencia a comparar"
+	s<-getLine
+	putStrLn $ (unlines (distancia10 (read s) y x) )
+	putStrLn $ show "Distancias"	
 --	putStrLn $ show normalizarModelo $ (generarModelo c)
