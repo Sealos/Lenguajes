@@ -8,6 +8,7 @@ import qualified Data.Map as Map
 
 
 type Modelo = Map.Map [Evento] Int
+type ModeloD = Map.Map [Evento] Float
 
 generarModelo :: [Evento] -> Modelo
 generarModelo x = Map.union (generarModeloCero x) (generarModeloUno x)
@@ -52,6 +53,20 @@ obtenerValores a b = foldl (+) 0 $ zipWith (\x y-> (y - x)*(y - x)) (map (valor 
 valor :: Modelo -> [Evento] -> Int
 valor m k = if ((fst(head k)) == 0) then 0 else Map.findWithDefault 0 k m
 
+
+{-
+concatAll s = foldr (++) [] s
+contador s = map (\x->(head x, length x)) . group . sort $ s
+contadorAll s = map contador s
+
+prob0 s [] = []
+prob0 s [x] = [(fromIntegral (snd x)) / (fromIntegral s)]
+prob0 s (x:xs) = (fromIntegral (snd x)) / (fromIntegral s): prob0 s xs
+
+pares [] = []
+pares xs = zip xs (tail xs)
+-}
+
 -- Directorio predeterminado
 directorio :: String
 directorio = "./xml/"
@@ -90,15 +105,12 @@ componer' dir = do
 {-
 buscar :: Int -> IO ()
 buscar = buscar' directorio
-  
+
 buscar' :: String -> Int -> IO ()
-buscar' dir n = do
-  seqfns <- loadMusicXmls dir
-  let (seqs, filenames) = unzip $ sortBy (compare `on` snd) $ (uncurry zip) seqfns
-  if (n > 0) && (n <= length seqs) then
-    -- ...
-    else
-      putStrLn "Indice fuera de rango"-}
+buscar' dir = do
+seqfns <- loadMusicXmls dir
+	let seqfns_ordenados = unzip $ sortBy (compare ‘on‘ snd) $ zip seqfns
+	-- ...-}
 
 tocar :: Int -> IO ()
 tocar n = do
@@ -144,4 +156,4 @@ main = do
 	s<-getLine
 	putStrLn $ (unlines (distancia10 (read s) y x) )
 	putStrLn $ show "Distancias"	
-	-- componer
+--	putStrLn $ show normalizarModelo $ (generarModelo c)
