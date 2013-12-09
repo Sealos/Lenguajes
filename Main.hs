@@ -77,8 +77,8 @@ listaProb m ev = map (\x -> (fst x, calcularProbabilidad m (head(fst x)) ev)) li
 	where lista = filter (\x -> (length (fst x) == 2) && ((head (fst x)) == ev)) $ Map.toList m
 
 calcularProbabilidad :: Modelo -> Evento -> Evento -> Double
-calcularProbabilidad m ev (0,0) = 0.3*((Map.findWithDefault 0 [ev]))/((Map.findWithDefault 0 [(0,0)]))
-calcularProbabilidad m ev evv = calcularProbabilidad m ev (0,0) + 0.7*(fromIntegral (Map.findWithDefault 0 [evv, ev]))/(fromIntegral (Map.findWithDefault 0 [evv]))
+calcularProbabilidad m ev (0,0) = 0.3*((Map.findWithDefault 0 [ev] m))/((Map.findWithDefault 0 [(0,0)] m))
+calcularProbabilidad m ev evv = calcularProbabilidad m ev (0,0) + 0.7*(fromIntegral (Map.findWithDefault 0 [evv, ev] m))/(fromIntegral (Map.findWithDefault 0 [evv] m))
 
 componer :: IO ()
 componer = componer' directorio
