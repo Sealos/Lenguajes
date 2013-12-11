@@ -102,7 +102,7 @@ componer' :: String -> IO ()
 componer' dir = do
 	(seqs, filenames) <- loadMusicXmls directorio
 	r <- getStdGen
-	let listRandom= take 10 (randoms r :: [Double])
+	let listRandom= take longitud (randoms r :: [Double])
 	let modelo = foldl (\x y -> unirModelos x (generarModelo y)) Map.empty seqs
 	putStrLn $ show modelo
 	-- let composicion = ...
