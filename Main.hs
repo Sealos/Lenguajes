@@ -16,12 +16,11 @@ generarModelo x = Map.union (generarModeloCero x) (generarModeloUno x)
 generarListaModelos :: [[Evento]] -> [Modelo]
 generarListaModelos x= map (generarModelo) x
 
-distancia10 :: Int->[String]->[Modelo]->[String]
+distancia10 :: Int -> [String] -> [Modelo] -> [String]
 distancia10 e y x= map (parsearTupla) (take 10 $ sortBy (compare `on` snd) ( zip (zip [0..] (map (drop 6) y)) (map (distancia ((!!) x e)) x)))
 
 parsearTupla :: ((Int,String),Float) -> String
-parsearTupla x=   ((((show (fst (fst x)) ++ "  ") ++ "  ") ++ (snd (fst x))) ++ "   ") ++ show (snd x)
-
+parsearTupla x = ((((show (fst (fst x)) ++ "  ") ++ "  ") ++ (snd (fst x))) ++ "   ") ++ show (snd x)
 
 --agregar :: Map.Map Evento Int -> Evento -> Map.Map Evento Int
 generarModeloCero :: [Evento] -> Modelo
@@ -81,19 +80,25 @@ calcularProbabilidad m ev (0,0) = (0.3)*(fromIntegral (Map.findWithDefault 0 [ev
 calcularProbabilidad m ev evv = calcularProbabilidad m ev (0,0) + 0.7*(fromIntegral (Map.findWithDefault 0 [evv, ev] m))/(fromIntegral (Map.findWithDefault 0 [evv] m))
 
 normalizar :: [([Evento], Double)] -> [([Evento], Double)]
-normalizar l= map (\x-> (fst x, ((snd x)/ modulo l)^2)) l
+normalizar l = map (\(x, y)-> (x, (y/ modulo l)^2)) l
 
 modulo l= sqrt (sum (map (\x->(snd x)^2) l))
 
 seleccionEvento :: Double -> [([Evento], Double)] -> Evento
-seleccionEvento r [x]= head (tail (fst x))
-seleccionEvento r (x:xs)| r >= (snd x) && r<snd (head xs)  = head (tail (fst x))			
-						| otherwise = seleccionEvento r xs                 
-						
-generarSecuencia:: Evento->[Double]->Modelo->[Evento]
-generarSecuencia (0,0) r m= [ seleccionEvento (head r) (listaProb m (0,0))]
---generarSecuencia ev r m=   scanl  (\x -> seleccionEvento x 
+seleccionEvento r [x] = head (tail (fst x))
+seleccionEvento r (x:xs)| r >= (snd x) && r < (snd (head xs)) = (head (tail (fst x)))
+						| otherwise = seleccionEvento r xs
 
+generarSecuencia:: Evento -> [Double] -> Modelo -> [Evento]
+generarSecuencia (0,0) r m= [ seleccionEvento (head r) (listaProb m (0,0))]
+--generarSecuencia ev r m=   scanl  (\x -> seleccionEvento x
+
+generarSecuencia' :: [Double] -> Modelo -> [Evento]
+generarSecuencia' rands m = reverse $ foldl (unirSecuencia m) [] rands
+
+unirSecuencia :: Modelo -> [Evento] -> Double -> [Evento]
+unirSecuencia mod [] rand = (seleccionEvento rand (listaProb m (0,0))):[]
+unirSecuencia mod ev rand = (seleccionEvento rand (listaProb m (head ev))):ev
 
 componer :: IO ()
 componer = componer' directorio
@@ -123,15 +128,13 @@ buscar :: Int -> IO ()
 buscar = buscar' directorio
 buscar' :: String -> Int -> IO ()
 buscar' dir n = do
-  seqfns <- loadMusicXmls dir
-  let (seqs, filenames) = unzip $ sortBy (compare `on` snd) $ (uncurry zip) seqfns
-  let modelos= generarListaModelos seqs 
-  if (n > 0) && (n <= length seqs) then
-		
+	seqfns <- loadMusicXmls dir
+	let (seqs, filenames) = unzip $ sortBy (compare `on` snd) $ (uncurry zip) seqfns
+	let modelos = generarListaModelos seqs
+	if (n > 0) && (n <= length seqs) then
 		putStrLn $ (unlines (distancia10 n filenames modelos)) 
-
-    else
-      putStrLn "Indice fuera de rango"
+	else
+		putStrLn "Indice fuera de rango"
 
 tocar :: Int -> IO ()
 tocar n = do
