@@ -5,7 +5,7 @@ import Euterpea hiding (Event)
 import Data.List as List
 import Data.Function
 import qualified Data.Map as Map
-
+import System.Random
 
 type Modelo = Map.Map [Evento] Int
 type ModeloD = Map.Map [Evento] Float
@@ -71,14 +71,29 @@ longitud = 50
 	reproduce.
 -}
 listaProb :: Modelo -> Evento -> [([Evento], Double)]
-listaProb m (0,0) = map (\x -> (fst x, calcularProbabilidad m (head(fst x)) (0,0))) lista
+listaProb m (0,0) = sortBy (compare `on` snd)  $ normalizar $ map (\x -> (fst x, calcularProbabilidad m (head(fst x)) (0,0))) lista
 	where lista = filter (\x -> (length (fst x) == 1) && (fst x) /= [(0,0)]) $ Map.toList m
-listaProb m ev = map (\x -> (fst x, calcularProbabilidad m (head(fst x)) ev)) lista
+listaProb m ev = sortBy (compare `on` snd) $ normalizar $ map (\x -> (fst x, calcularProbabilidad m (head (tail(fst x))) ev)) lista
 	where lista = filter (\x -> (length (fst x) == 2) && ((head (fst x)) == ev)) $ Map.toList m
 
 calcularProbabilidad :: Modelo -> Evento -> Evento -> Double
-calcularProbabilidad m ev (0,0) = 0.3*((Map.findWithDefault 0 [ev] m))/((Map.findWithDefault 0 [(0,0)] m))
+calcularProbabilidad m ev (0,0) = (0.3)*(fromIntegral (Map.findWithDefault 0 [ev] m))/(fromIntegral(Map.findWithDefault 0 [(0,0)] m))
 calcularProbabilidad m ev evv = calcularProbabilidad m ev (0,0) + 0.7*(fromIntegral (Map.findWithDefault 0 [evv, ev] m))/(fromIntegral (Map.findWithDefault 0 [evv] m))
+
+normalizar :: [([Evento], Double)] -> [([Evento], Double)]
+normalizar l= map (\x-> (fst x, ((snd x)/ modulo l)^2)) l
+
+modulo l= sqrt (sum (map (\x->(snd x)^2) l))
+
+seleccionEvento :: Double -> [([Evento], Double)] -> Evento
+seleccionEvento r [x]= head (tail (fst x))
+seleccionEvento r (x:xs)| r >= (snd x) && r<snd (head xs)  = head (tail (fst x))			
+						| otherwise = seleccionEvento r xs                 
+						
+generarSecuencia:: Evento->[Double]->Modelo->[Evento]
+generarSecuencia (0,0) r m= [ seleccionEvento (head r) (listaProb m (0,0))]
+--generarSecuencia ev r m=   scanl  (\x -> seleccionEvento x 
+
 
 componer :: IO ()
 componer = componer' directorio
@@ -86,6 +101,8 @@ componer = componer' directorio
 componer' :: String -> IO ()
 componer' dir = do
 	(seqs, filenames) <- loadMusicXmls directorio
+	r <- getStdGen
+	let listRandom= take 10 (randoms r :: [Double])
 	let modelo = foldl (\x y -> unirModelos x (generarModelo y)) Map.empty seqs
 	putStrLn $ show modelo
 	-- let composicion = ...
