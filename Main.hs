@@ -91,11 +91,7 @@ seleccionEvento r (x:xs)| r >= (snd x) && r < (snd (head xs)) = (head (tail (fst
 
 seleccionEvento' :: Double -> [([Evento], Double)] -> Evento
 seleccionEvento' rand [x] = last (fst x)
-seleccionEvento' rand (x:xs) = if (rand > 0) then seleccionEvento' (rand - (snd x)) xs else last (fst x)
-
-generarSecuencia:: Evento -> [Double] -> Modelo -> [Evento]
-generarSecuencia (0,0) r m= [ seleccionEvento (head r) (listaProb m (0,0))]
---generarSecuencia ev r m=   scanl  (\x -> seleccionEvento x
+seleccionEvento' rand (x:xs) = if ((rand - (snd x)) > 0) then seleccionEvento' (rand - (snd x)) xs else last (fst x)
 
 generarSecuencia' :: [Double] -> Modelo -> [Evento]
 generarSecuencia' rands m = reverse $ foldl (unirSecuencia m) [] rands
@@ -111,16 +107,11 @@ componer' :: String -> IO ()
 componer' dir = do
 	(seqs, filenames) <- loadMusicXmls directorio
 	r <- getStdGen
-	let listRandom= take longitud (randoms r :: [Double])
+	let listRandom = take longitud (randoms r :: [Double])
 	let modelo = foldl (\x y -> unirModelos x (generarModelo y)) Map.empty seqs
-	let modelo1 = generarModelo (head seqs)
-	let a = generarSecuencia' listRandom modelo
-	-- putStrLn $ show listRandom
-	putStrLn $ show a
-	play $ sequenceToMusic a
-	-- let composicion = ...
-	--putStrLn $ show composicion
-	--play $ sequenceToMusic composicion
+	let composicion = generarSecuencia' listRandom modelo
+	putStrLn $ show composicion
+	play $ sequenceToMusic composicion
 
 {-
 	Recupera las diez secuencias más similares a la k-ésima secuencia
