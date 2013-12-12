@@ -85,9 +85,11 @@ normalizar l = map (\(x, y)-> (x, (y/ modulo l)^2)) l
 modulo l= sqrt (sum (map (\x->(snd x)^2) l))
 
 seleccionEvento :: Double -> [([Evento], Double)] -> Evento
-seleccionEvento r [x] = head (tail (fst x))
-seleccionEvento r (x:xs)| r >= (snd x) && r < (snd (head xs)) = (head (tail (fst x)))
-						| otherwise = seleccionEvento r xs
+seleccionEvento r [([x],_)] = x
+seleccionEvento r [((x:xs),_)] = head xs
+seleccionEvento r (x:xs)	| (length (fst x) == 2) && r >= (snd x) && r < (snd (head xs)) = (head (tail (fst x)))
+							|(length (fst x) == 1) && r >= (snd x) && r < (snd (head xs)) = (head (fst x))
+							| otherwise = seleccionEvento r xs
 
 seleccionEvento' :: Double -> [([Evento], Double)] -> Evento
 seleccionEvento' rand [x] = last (fst x)
