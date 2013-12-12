@@ -19,17 +19,19 @@ generarModelo :: [Evento] -> Modelo
 generarModelo x = Map.union (generarModeloCero x) (generarModeloUno x)
 
 {-
-	@param
-	@param
-	@param
-	@return 
+	Devuelve las 10 distancias mas cercanas a la consulta dada.
+	@param Consulta
+	@param Lista de nombres de archivos xml
+	@param Lista de Modelos
+	@return Lista de Strings con formato: nro Secuencia + nombre de archivo + distancia a consulta
 -}
 distancia10 :: Int -> [String] -> [Modelo] -> [String]
 distancia10 e y x= map (parsearTupla) (take 10 $ sortBy (compare `on` snd) ( zip (zip [0..] (map (drop 6) y)) (map (distancia ((!!) x e)) x)))
 
 {-
-	@param
-	@return 
+	Funcion para parsear una tupla y convertirla a String.
+	@param Tupla ((nro Secuencia, nombre archivo xml), distancia)
+	@return String con formato: nro Secuencia+ nombre archivo xml + distancia
 -}
 parsearTupla :: ((Int, String), Float) -> String
 parsearTupla x = ((((show (fst (fst x)) ++ "  ") ++ "  ") ++ (snd (fst x))) ++ "   ") ++ show (snd x)
