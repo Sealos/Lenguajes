@@ -90,6 +90,7 @@ seleccionEvento r (x:xs)| r >= (snd x) && r < (snd (head xs)) = (head (tail (fst
 						| otherwise = seleccionEvento r xs
 
 seleccionEvento' :: Double -> [([Evento], Double)] -> Evento
+seleccionEvento' rand [x] = last (fst x)
 seleccionEvento' rand (x:xs) = if (rand > 0) then seleccionEvento' (rand - (snd x)) xs else last (fst x)
 
 generarSecuencia:: Evento -> [Double] -> Modelo -> [Evento]
@@ -115,8 +116,8 @@ componer' dir = do
 	let modelo1 = generarModelo (head seqs)
 	let a = generarSecuencia' listRandom modelo
 	-- putStrLn $ show listRandom
-	putStrLn $ show modelo1
-	putStrLn $ show listRandom
+	putStrLn $ show a
+	play $ sequenceToMusic a
 	-- let composicion = ...
 	--putStrLn $ show composicion
 	--play $ sequenceToMusic composicion
