@@ -89,6 +89,9 @@ seleccionEvento r [x] = head (tail (fst x))
 seleccionEvento r (x:xs)| r >= (snd x) && r < (snd (head xs)) = (head (tail (fst x)))
 						| otherwise = seleccionEvento r xs
 
+seleccionEvento' :: Double -> [([Evento], Double)] -> Evento
+seleccionEvento' rand (x:xs) = if (rand > 0) then seleccionEvento' (rand - (snd x)) xs else last (fst x)
+
 generarSecuencia:: Evento -> [Double] -> Modelo -> [Evento]
 generarSecuencia (0,0) r m= [ seleccionEvento (head r) (listaProb m (0,0))]
 --generarSecuencia ev r m=   scanl  (\x -> seleccionEvento x
@@ -97,8 +100,8 @@ generarSecuencia' :: [Double] -> Modelo -> [Evento]
 generarSecuencia' rands m = reverse $ foldl (unirSecuencia m) [] rands
 
 unirSecuencia :: Modelo -> [Evento] -> Double -> [Evento]
-unirSecuencia mod [] rand = (seleccionEvento rand (listaProb m (0,0))):[]
-unirSecuencia mod ev rand = (seleccionEvento rand (listaProb m (head ev))):ev
+unirSecuencia mod [] rand = (seleccionEvento' rand (listaProb mod (0,0))):[]
+unirSecuencia mod ev rand = (seleccionEvento' rand (listaProb mod (head ev))):ev
 
 componer :: IO ()
 componer = componer' directorio
@@ -109,7 +112,11 @@ componer' dir = do
 	r <- getStdGen
 	let listRandom= take longitud (randoms r :: [Double])
 	let modelo = foldl (\x y -> unirModelos x (generarModelo y)) Map.empty seqs
-	putStrLn $ show modelo
+	let modelo1 = generarModelo (head seqs)
+	let a = generarSecuencia' listRandom modelo
+	-- putStrLn $ show listRandom
+	putStrLn $ show modelo1
+	putStrLn $ show listRandom
 	-- let composicion = ...
 	--putStrLn $ show composicion
 	--play $ sequenceToMusic composicion
