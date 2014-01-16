@@ -1,3 +1,6 @@
+:- dynamic juego_init/0, turno/0, maquina/0.
+:- [imprimir].
+
 tablero([
 	['  ','< ','  ','< ','  ','< ','  ','< '],
 	['< ','  ','< ','  ','< ','  ','< ','  '],
@@ -9,36 +12,51 @@ tablero([
 	['> ','  ','> ','  ','> ','  ','> ','  ']
 ]).
 
-print_line([], _).
-print_line([H|T], '|') :-
-	write('|'),
-	write(H),
-	write('|'),
-	write(' '),
-	print_line(T, '|').
-print_line([H|T], X) :-
-	write(X),
-	write(H),
-	write(X),
-	print_line(T, X).
+revisar_maquina('S') :-
+	assert(maquina).
 
-print_matrix([], _).
-print_matrix([H|T], N) :-
-	write(N),
-	write(' '),
-	print_line(H, '|'),
-	nl,
-	N1 is N + 1,
-	print_matrix(T, N1).
+revisar_maquina(_).
 
-imprimir_tablero() :-
-	write('  '),
-	print_line([1,2,3,4,5,6,7,8], '  '),
-	nl,
-	tablero(X),
-	nl,
-	print_matrix(X, 1).
+blanca('< ').
+blanca('<<').
+negra('> ').
+negra('>>').
 
 get(M, X, Y, E) :-
-	nth0(X, M, L),
-	nth0(Y, L, E).
+	nth1(X, M, L),
+	nth1(Y, L, E).
+
+jugar :-
+	not(juego_init),
+	!,
+	write('Desea jugar contra la maquina (S/N)? '),
+	read(M),
+	revisar_maquina(M),
+	imprimir_tablero,
+	assert(juego_init).
+jugar:-
+	write('Ya inicio un juego.').
+
+jugada_valida(X1, Y1, X2, Y2) :-
+	turno,
+	tablero(M),
+	get(M, X1, Y1, E1),
+	get(M, X2, Y2, E2),
+	blanca(E1),
+	E2 = '  ',
+	!.
+
+jugada_valida(X1, Y1, X2, Y2) :-
+	not(turno),
+	tablero(M),
+	get(M, X1, Y1, E1),
+	get(M, X2, Y2, E2),
+	negra(E1),
+	E2 = '  '.
+
+jugada_valida(_, _, _, _) :- !,
+	write('No es una jugada valida.'),
+	nl.
+
+jugada(X1, Y1, X2, Y2) :- !,
+	jugada_valida(X1, Y1, X2, Y2).
