@@ -21,6 +21,14 @@ blanca('< ').
 blanca('<<').
 negra('> ').
 negra('>>').
+ficha(F) :-
+	turno,
+	blanca(F),
+	!.
+ficha(F) :-
+	not(turno),
+	negra(F),
+	!.
 
 get(M, X, Y, E) :-
 	nth1(X, M, L),
@@ -38,20 +46,12 @@ jugar:-
 	write('Ya inicio un juego.').
 
 jugada_valida(X1, Y1, X2, Y2) :-
-	turno,
-	tablero(M),
-	get(M, X1, Y1, E1),
-	get(M, X2, Y2, E2),
-	blanca(E1),
-	E2 = '  ',
-	!.
-
-jugada_valida(X1, Y1, X2, Y2) :-
 	not(turno),
 	tablero(M),
 	get(M, X1, Y1, E1),
 	get(M, X2, Y2, E2),
-	negra(E1),
+	ficha(E1),
+	!,
 	E2 = '  '.
 
 jugada_valida(_, _, _, _) :- !,
