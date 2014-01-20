@@ -78,3 +78,13 @@ jugada(X1, Y1, X2, Y2) :- !,
 	write('Movimiento: '),
 	imprimir_tablero,
 	cambiar_jugador.
+
+reemplazar([_|T], 0, X, [X|T]).
+reemplazar([H|T], I, X, [H|R]):- I > 0, I1 is I-1, reemplazar(T, I1, X, R).
+
+	
+actualizar_tablero(X1,Y1,X2,Y2,M2) :-
+	ficha(F),
+	tablero(X1,F1A),Y11 is Y1-1, reemplazar(F1A,Y11,'  ',F1D), 
+	tablero(X2,F2A), Y22 is Y2-1, reemplazar(F2A,Y22,F,F2D), 
+	tablero(M1), X11 is X1-1, reemplazar(M1,X11,F1D,M1A), X22 is X2-1, reemplazar(M1A,X22,F2D,M2).

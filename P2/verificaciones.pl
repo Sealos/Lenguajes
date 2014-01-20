@@ -7,6 +7,9 @@ jugada_valida(X1, Y1, X2, Y2) :-
 	E2 = '  ',
 	%Verificar si es un movimiento valido
 	write('Movimiento: '),
+	actualizar_tablero(X1, Y1, X2, Y2,M2),
+	retract(tablero(M)),
+	assert(tablero(M2)),
 	imprimir_tablero,
 	cambiar_jugador.
 
