@@ -1,4 +1,4 @@
-:- dynamic juego_init/0, turno/0, maquina/0, tablero/1, tablero/0.
+:- dynamic juego_init/0, turno/0, maquina/0, tablero/1, tablero/0,tablero/2.
 :- [imprimir, verificaciones, ai].
 
 tablero([
@@ -99,4 +99,6 @@ actualizar_tablero(X1,Y1,X2,Y2,M2) :-
 	ficha(F),
 	tablero(X1,F1A),reemplazar(F1A,Y1,'  ',F1D), 
 	tablero(X2,F2A),reemplazar(F2A,Y2,F,F2D), 
-	tablero(M1),reemplazar(M1,X1,F1D,M1A), reemplazar(M1A,X2,F2D,M2).
+	tablero(M1),reemplazar(M1,X1,F1D,M1A), reemplazar(M1A,X2,F2D,M2),
+	retract(tablero(X1,F1A)), retract(tablero(X2,F2A)), 
+	assert(tablero(X1,F1D)), assert(tablero(X2,F2D)).
