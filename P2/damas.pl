@@ -28,10 +28,12 @@ revisar_maquina(_).
 
 turno.
 
+reina:- ficha('<<');ficha('>>').
+
 blanca('< ').
-blanca('<<').
+
 negra('> ').
-negra('>>').
+
 ficha(F) :-
 	turno,
 	blanca(F),
@@ -79,6 +81,16 @@ jugada(X1, Y1, X2, Y2) :- !,
 	imprimir_tablero,
 	cambiar_jugador.
 
+procesar_tablero(X1,Y1,X2,Y2):-
+	tablero(M),
+	%Procesar
+	write('Movimiento: '),
+	actualizar_tablero(X1, Y1, X2, Y2,M2),
+	retract(tablero(M)),
+	assert(tablero(M2)),
+	imprimir_tablero,
+	cambiar_jugador.
+	
 reemplazar([_|T], 1, X, [X|T]).
 reemplazar([H|T], I, X, [H|R]):- I > 1, I1 is I-1, reemplazar(T, I1, X, R).
 
