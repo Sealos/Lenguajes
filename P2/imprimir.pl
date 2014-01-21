@@ -23,7 +23,6 @@ print_matrix([H|T], N) :- !,
 imprimir_tablero() :- !,
 	write('  '),
 	print_line([1,2,3,4,5,6,7,8], '  '),
-	nl,
 	tablero(X),
 	nl,
 	print_matrix(X, 1).

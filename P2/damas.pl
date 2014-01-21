@@ -1,4 +1,4 @@
-:- dynamic juego_init/0, turno/0, maquina/0, tablero/1, tablero/0,tablero/2.
+:- dynamic juego_init/0, turno/0, maquina/0, tablero/1, tablero/0, tablero/2.
 :- [imprimir, verificaciones, ai].
 
 tablero([
@@ -12,36 +12,12 @@ tablero([
 	['> ','  ','> ','  ','> ','  ','> ','  ']
 ]).
 
-tablero(1, ['  ','< ','  ','< ','  ','< ','  ','< ']).
-tablero(2, ['< ','  ','< ','  ','< ','  ','< ','  ']).
-tablero(3, ['  ','< ','  ','< ','  ','< ','  ','< ']).
-tablero(4, ['  ','  ','  ','  ','  ','  ','  ','  ']).
-tablero(5, ['  ','  ','  ','  ','  ','  ','  ','  ']).
-tablero(6, ['> ','  ','> ','  ','> ','  ','> ','  ']).
-tablero(7, ['  ','> ','  ','> ','  ','> ','  ','> ']).
-tablero(8, ['> ','  ','> ','  ','> ','  ','> ','  ']).
-
 revisar_maquina('S') :-
 	assert(maquina).
 
 revisar_maquina(_).
 
 turno.
-
-reina:- ficha('<<');ficha('>>').
-
-blanca('< ').
-
-negra('> ').
-
-ficha(F) :-
-	turno,
-	blanca(F),
-	!.
-ficha(F) :-
-	not(turno),
-	negra(F),
-	!.
 
 get(M, X, Y, E) :-
 	nth1(X, M, L),
@@ -77,6 +53,7 @@ jugar:-
 
 jugada(X1, Y1, X2, Y2) :- !,
 	jugada_valida(X1, Y1, X2, Y2),
+	procesar_tablero(X1, Y1, X2, Y2),
 	write('Movimiento: '),
 	imprimir_tablero,
 	cambiar_jugador.
@@ -94,7 +71,6 @@ procesar_tablero(X1,Y1,X2,Y2):-
 reemplazar([_|T], 1, X, [X|T]).
 reemplazar([H|T], I, X, [H|R]):- I > 1, I1 is I-1, reemplazar(T, I1, X, R).
 
-	
 actualizar_tablero(X1,Y1,X2,Y2,M2) :-
 	ficha(F),
 	tablero(X1,F1A),reemplazar(F1A,Y1,'  ',F1D), 
