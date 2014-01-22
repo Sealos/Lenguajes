@@ -32,6 +32,26 @@ des_peon(X) :-
 uno(1).
 uno(-1).
 
+fichas_jugador_actual(L) :-
+	turno,
+	tablero(M),
+	findall(X, get(M, X, '< '), L1),
+	findall(Y, get(M, Y, '<<'), L2),
+	append(L1, L2, L).
+
+fichas_jugador_actual(L) :-
+	not(turno),
+	tablero(M),
+	findall(X, get(M, X, '> '), L1),
+	findall(Y, get(M, Y, '>>'), L2),
+	append(L1, L2, L).
+
+obtener_saltos(Z, LW) :-
+	findall(X, come(Z, X), LW).
+
+saltos_jugador_actual(L, S) :-
+	maplist(obtener_saltos, L, S).
+
 jugada_valida(Z, W) :-
 	tablero(M),
 	get(M, W, E),			% El destino tiene que ser vacio
@@ -89,6 +109,20 @@ jugada_valida_reina(Z, W) :-
 	diagonal(Z, W).
 
 % Come
+come(Z, W) :-
+	tablero(M),
+	get(M, Z, E),
+	es_reina(E),
+	!,
+	come_reina(Z, W).
+
+come(Z, W) :-
+	tablero(M),
+	get(M, Z, E),
+	not(es_reina(E)),
+	!,
+	come_peon(Z, W).
+
 come_reina(Z, W) :-
 	tablero(M),
 	X is div(Z, 8),
