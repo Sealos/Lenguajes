@@ -12,11 +12,6 @@ tablero([
 	'> ','  ','> ','  ','> ','  ','> ','  '
 ]).
 
-revisar_maquina('S') :-
-	assert(maquina).
-
-revisar_maquina(_).
-
 turno.
 
 get(M, X, E) :-

@@ -9,6 +9,11 @@ negras('>>').
 blancas('< ').
 blancas('<<').
 
+revisar_maquina('S') :-
+	assert(maquina).
+
+revisar_maquina(_).
+
 ficha(F) :-
 	turno,
 	blanca(F),

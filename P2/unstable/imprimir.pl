@@ -27,4 +27,5 @@ imprimir_tablero() :- !,
 	nl,
 	write(1),
 	write(' '),
-	print_matrix(X, 1, 1).
+	print_matrix(X, 1, 1),
+	nl.
