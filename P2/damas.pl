@@ -49,17 +49,36 @@ jugar:-
 	write('Ya inicio un juego.'),
 	!.
 
-jugada(X1, Y1, X2, Y2) :- !,
-	Z is X1*8 + Y1 - 8,
-    W is X2*8 + Y2 - 8,
-
+jugada(X1, Y1, X2, Y2) :-
+	juego_init,
+	X1 > 0,
+	X1 < 9,
+	Y1 > 0,
+	Y1 < 9,
+	X2 > 0,
+	X2 < 9,
+	Y2 > 0,
+	Y2 < 9,
+	Z is X1*8 + Y1 - 9,
+	W is X2*8 + Y2 - 9,
+	jugada_valida(Z, W),
 	procesar_tablero(Z, W).
 
+jugada(_, _, _, _) :-
+	juego_init,
+	write('Jugada invalida, intente nuevamente.'),
+	nl.
+
+jugada(_,_,_,_) :- !,
+	not(juego_init),
+	write('No ha iniciado el juego, inicie con jugar'),
+	nl.
 
 procesar_tablero(Z, W):-
 	tablero(M),
 	%Procesar
 	write('Movimiento: '),
+	nl,
 	actualizar_tablero(Z, W, M2),
 	retract(tablero(M)), 
 	assert(tablero(M2)),
@@ -69,13 +88,12 @@ procesar_tablero(Z, W):-
 	
 reemplazar([_|T], 1, X, [X|T]).
 reemplazar([H|T], I, X, [H|R]) :-
-	I > 1, 
+	I > 1,
 	I1 is I-1, 
 	reemplazar(T, I1, X, R).
 
 actualizar_tablero(Z, W, M2) :-
 	ficha(F),
 	tablero(M),
-	reemplazar(M,Z,'  ',M1), 
-	reemplazar(M1,W,F,M2).
-	
+	reemplazar(M, Z, '  ', M1), 
+	reemplazar(M1, W, F, M2).
