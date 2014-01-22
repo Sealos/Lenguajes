@@ -19,7 +19,7 @@ revisar_maquina(_).
 
 turno.
 
-get(M, X, Y, E) :-
+get(M, X, E) :-
 	nth1(X, M, E).
 
 cambiar_jugador :-
