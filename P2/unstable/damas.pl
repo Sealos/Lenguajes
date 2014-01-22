@@ -18,8 +18,8 @@ get(M, X, E) :-
 	nth0(X, M, E).
 
 get(M, X, Y, E) :-
-       Z is (X * 8) + Y,
-       get(M, Z, E).
+	Z is (X * 8) + Y,
+	get(M, Z, E).
 
 cambiar_jugador :-
 	not(turno),
