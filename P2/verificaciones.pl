@@ -81,9 +81,34 @@ jugada_valida(Z, W) :-
 	).
 
 % Solo arriba o abajo
-diagonal(Z, W, E) :-
-		W is Z + E * 9;
-		W is Z + E * 7.
+diagonal(Z, W, 1) :-
+	YZ is mod(Z, 8),
+	(
+	(
+		W is Z + 1 * 9,
+		YW is mod(W, 8),
+		YW >= YZ
+	)
+	;
+	(
+		W is Z + 1 * 7,
+		YW is mod(W, 8),
+		YW =< YZ
+	)).
+
+diagonal(Z, W, -1) :-
+	YZ is mod(Z, 8),
+	((
+		W is Z + (-1) * 9,
+		YW is mod(W, 8),
+		YW =< YZ
+	)
+	;
+	(
+		W is Z + (-1) * 7,
+		YW is mod(W, 8),
+		YW >= YZ
+	)).
 
 % Cualquier diagonal
 diagonal(Z, W) :-
@@ -92,31 +117,43 @@ diagonal(Z, W) :-
 	diagonalSE(Z, W, 1);
 	diagonalSW(Z, W, 1).
 
-diagonalNE(Z, W, E) :-
+diagonalNW(Z, W, E) :-
 	W is Z - E * 9,
+	YZ is mod(Z, 8),
+	YW is mod(W, 8),
+	YW =< YZ,
 	tablero(M),
 	get(M, W, F),
 	F = '  '.
 
-diagonalNE(Z, W, E) :-
+diagonalNW(Z, W, E) :-
 	tablero(M),
 	Z1 is Z - E * 9,
 	Z1 >= 0,
+	YZ is mod(Z, 8),
+	YW is mod(Z1, 8),
+	YW =< YZ,
 	get(M, Z1, F),
 	F = '  ',
 	E1 is E + 1,
 	diagonalNE(Z, W, E1).
 
-diagonalNW(Z, W, E) :-
+diagonalNE(Z, W, E) :-
 	W is Z - E * 7,
+	YZ is mod(Z, 8),
+	YW is mod(W, 8),
+	YW >= YZ,
 	tablero(M),
 	get(M, W, F),
 	F = '  '.
 
-diagonalNW(Z, W, E) :-
+diagonalNE(Z, W, E) :-
 	tablero(M),
 	Z1 is Z - E * 7,
 	Z1 >= 0,
+	YZ is mod(Z, 8),
+	YW is mod(Z1, 8),
+	YW >= YZ,
 	get(M, Z1, F),
 	F = '  ',
 	E1 is E + 1,
@@ -124,6 +161,9 @@ diagonalNW(Z, W, E) :-
 
 diagonalSE(Z, W, E) :-
 	W is Z + E * 9,
+	YZ is mod(Z, 8),
+	YW is mod(W, 8),
+	YW >= YZ,
 	tablero(M),
 	get(M, W, F),
 	F = '  '.
@@ -132,6 +172,9 @@ diagonalSE(Z, W, E) :-
 	tablero(M),
 	Z1 is Z + E * 9,
 	Z1 =< 63,
+	YZ is mod(Z, 8),
+	YW is mod(Z1, 8),
+	YW >= YZ,
 	get(M, Z1, F),
 	F = '  ',
 	E1 is E + 1,
@@ -139,6 +182,9 @@ diagonalSE(Z, W, E) :-
 
 diagonalSW(Z, W, E) :-
 	W is Z + E * 7,
+	YZ is mod(Z, 8),
+	YW is mod(W, 8),
+	YW =< YZ,
 	tablero(M),
 	get(M, W, F),
 	F = '  '.
@@ -147,6 +193,9 @@ diagonalSW(Z, W, E) :-
 	tablero(M),
 	Z1 is Z + E * 7,
 	Z1 =< 63,
+	YZ is mod(Z, 8),
+	YW is mod(Z1, 8),
+	YW =< YZ,
 	get(M, Z1, F),
 	F = '  ',
 	E1 is E + 1,
