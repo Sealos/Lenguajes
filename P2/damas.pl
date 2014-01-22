@@ -33,8 +33,8 @@ cambiar_jugador :-
 	turno,
 	!,
 	retract(turno),
-	write('Juegan las fichas negras (>> | >): '),
-	existe_salto.
+	write('Juegan las fichas negras (>> | >): ').
+	%existe_salto.
 
 jugar :-
 	
@@ -75,8 +75,10 @@ jugada(X1, Y1, X2, Y2) :-
 	W is X2*8 + Y2 - 9,
 	Z1 is Z + 1,
 	W1 is W + 1,
+	(come(Z,W));
+	(not(come(Z,W)),
 	jugada_valida(Z, W),
-	procesar_tablero(Z1, W1).
+	procesar_tablero(Z1, W1)).
 
 jugada(_, _, _, _) :-
 	juego_init,
@@ -99,6 +101,18 @@ procesar_tablero(Z, W):-
 
 	imprimir_tablero,
 	cambiar_jugador.
+
+procesar_tablero_come(Z,W,XS,YS):-
+	tablero(M),
+	%Procesar
+	write('Movimiento: '),
+	nl,
+	actualizar_tablero_come(Z, W, XS, YS, M3),
+	retract(tablero(M)), 
+	assert(tablero(M3)),
+	imprimir_tablero,
+	cambiar_jugador.
+
 	
 reemplazar([_|T], 1, X, [X|T]).
 reemplazar([H|T], I, X, [H|R]) :-
@@ -111,6 +125,16 @@ actualizar_tablero(Z, W, M2) :-
 	tablero(M),
 	reemplazar(M, Z, '  ', M1), 
 	reemplazar(M1, W, F, M2).
+
+actualizar_tablero_come(Z, W, XS, YS, M3) :-
+	ficha(F),
+	tablero(M),
+	C is XS*8 + YS - 9,
+	C1 is C + 1,
+	reemplazar(M, Z, '  ', M1), 
+	reemplazar(M1, W, F, M2),
+	reemplazar(M2, C1,'  ',M3).
+
 
 fichas_salto([],[]).
 fichas_salto([X|Y],[H|T]):- 

@@ -277,4 +277,9 @@ come_peon(Z, W) :-
 	not_ficha(E1),
 	get(M, XFF, YFF, E2),
 	E2 = '  ',
-	W is XFF *8 + YFF.
+	W is XFF *8 + YFF,
+	Z1 is Z + 1,
+	W1 is W + 1,
+	XF1 is XF+1,
+	YF1 is YF+1,
+	procesar_tablero_come(Z1, W1, XF1, YF1).
