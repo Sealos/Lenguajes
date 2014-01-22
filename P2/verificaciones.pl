@@ -80,15 +80,6 @@ jugada_valida(Z, W) :-
 		)
 	).
 
-numero(1).
-numero(2).
-numero(3).
-numero(4).
-numero(5).
-numero(6).
-numero(7).
-numero(8).
-
 % Solo arriba o abajo
 diagonal(Z, W, E) :-
 		W is Z + E * 9;
@@ -96,13 +87,70 @@ diagonal(Z, W, E) :-
 
 % Cualquier diagonal
 diagonal(Z, W) :-
-	numero(E),
-	(
-		W is Z + E * 9;
-		W is Z - E * 9;
-		W is Z + E * 7;
-		W is Z - E * 7
-	).
+	diagonalNE(Z, W, 1);
+	diagonalNW(Z, W, 1);
+	diagonalSE(Z, W, 1);
+	diagonalSW(Z, W, 1).
+
+diagonalNE(Z, W, E) :-
+	W is Z - E * 9,
+	tablero(M),
+	get(M, W, F),
+	F = '  '.
+
+diagonalNE(Z, W, E) :-
+	tablero(M),
+	Z1 is Z - E * 9,
+	Z1 >= 0,
+	get(M, Z1, F),
+	F = '  ',
+	E1 is E + 1,
+	diagonalNE(Z, W, E1).
+
+diagonalNW(Z, W, E) :-
+	W is Z - E * 7,
+	tablero(M),
+	get(M, W, F),
+	F = '  '.
+
+diagonalNW(Z, W, E) :-
+	tablero(M),
+	Z1 is Z - E * 7,
+	Z1 >= 0,
+	get(M, Z1, F),
+	F = '  ',
+	E1 is E + 1,
+	diagonalNW(Z, W, E1).
+
+diagonalSE(Z, W, E) :-
+	W is Z + E * 9,
+	tablero(M),
+	get(M, W, F),
+	F = '  '.
+
+diagonalSE(Z, W, E) :-
+	tablero(M),
+	Z1 is Z + E * 9,
+	Z1 =< 63,
+	get(M, Z1, F),
+	F = '  ',
+	E1 is E + 1,
+	diagonalSE(Z, W, E1).
+
+diagonalSW(Z, W, E) :-
+	W is Z + E * 7,
+	tablero(M),
+	get(M, W, F),
+	F = '  '.
+
+diagonalSW(Z, W, E) :-
+	tablero(M),
+	Z1 is Z + E * 7,
+	Z1 =< 63,
+	get(M, Z1, F),
+	F = '  ',
+	E1 is E + 1,
+	diagonalSW(Z, W, E1).
 
 jugada_valida(_, _, _, _) :- !,
 	write('No es una jugada valida.'),
