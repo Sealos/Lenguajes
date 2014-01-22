@@ -1,12 +1,12 @@
-:- dynamic juego_init/0, turno/0, maquina/0, tablero/1, tablero/0, tablero/2.
+:- dynamic juego_init/0, turno/0, maquina/0, tablero/1, tablero/0.
 :- [imprimir, verificaciones, ai].
 
 tablero([
 	'  ','< ','  ','< ','  ','< ','  ','< ',
 	'< ','  ','< ','  ','< ','  ','< ','  ',
 	'  ','< ','  ','< ','  ','< ','  ','< ',
-	'  ','  ','  ','  ','  ','  ','> ','  ',
-	'  ','  ','  ','< ','  ','  ','  ','  ',
+	'  ','  ','  ','  ','  ','  ','  ','  ',
+	'  ','  ','  ','  ','  ','  ','  ','  ',
 	'> ','  ','> ','  ','> ','  ','> ','  ',
 	'  ','> ','  ','> ','  ','> ','  ','> ',
 	'> ','  ','> ','  ','> ','  ','> ','  '
@@ -15,7 +15,11 @@ tablero([
 turno.
 
 get(M, X, E) :-
-	nth1(X, M, E).
+	nth0(X, M, E).
+
+get(M, X, Y, E) :-
+       Z is (X * 8) + Y,
+       get(M, Z, E).
 
 cambiar_jugador :-
 	not(turno),
@@ -46,34 +50,32 @@ jugar:-
 	!.
 
 jugada(X1, Y1, X2, Y2) :- !,
-	Z is X1*8 + Y1,
-	W is X2*8 + Y2,
-	jugada_valida(Z, W),
-	procesar_tablero(Z, W),
-	write('Movimiento: '),
-	imprimir_tablero,
-	cambiar_jugador.
+	Z is X1*8 + Y1 - 8,
+    W is X2*8 + Y2 - 8,
+
+	procesar_tablero(Z, W).
+
 
 procesar_tablero(Z, W):-
 	tablero(M),
 	%Procesar
 	write('Movimiento: '),
 	actualizar_tablero(Z, W, M2),
-	retract(tablero(M)),
+	retract(tablero(M)), 
 	assert(tablero(M2)),
+
 	imprimir_tablero,
 	cambiar_jugador.
 	
-reemplazar([_|T, 1, X, [X|T]).
-reemplazar([H|T, I, X, [H|R]) :-
+reemplazar([_|T], 1, X, [X|T]).
+reemplazar([H|T], I, X, [H|R]) :-
 	I > 1, 
 	I1 is I-1, 
 	reemplazar(T, I1, X, R).
 
 actualizar_tablero(Z, W, M2) :-
 	ficha(F),
-	tablero(X1,F1A),reemplazar(F1A,Y1,'  ',F1D), 
-	tablero(X2,F2A),reemplazar(F2A,Y2,F,F2D), 
-	tablero(M1),reemplazar(M1,X1,F1D,M1A), reemplazar(M1A,X2,F2D,M2),
-	retract(tablero(X1,F1A)), retract(tablero(X2,F2A)), 
-	assert(tablero(X1,F1D)), assert(tablero(X2,F2D)).
+	tablero(M),
+	reemplazar(M,Z,'  ',M1), 
+	reemplazar(M1,W,F,M2).
+	
