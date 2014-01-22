@@ -75,10 +75,10 @@ diagonal(Z, W) :-
 		W is Z - E * 7
 	).
 
-%jugada_valida(_, _, _, _) :- !,
-%	write('No es una jugada valida.'),
-%	nl,
-%	fail.
+jugada_valida(_, _, _, _) :- !,
+	write('No es una jugada valida.'),
+	nl,
+	fail.
 
 jugada_valida_peon(Z, W):-
 	des_peon(E),
@@ -89,6 +89,31 @@ jugada_valida_reina(Z, W) :-
 	diagonal(Z, W).
 
 % Come
+come_reina(Z, W) :-
+	tablero(M),
+	X is div(Z, 8),
+	%write('X: '),write(X),nl,
+	Y is mod(Z, 8),
+	%write('Y: '),write(Y),nl,
+	uno(N),
+	XF is X + N,
+	%write('XF: '),write(XF),nl,
+	XF < 7,
+	XFF is XF + N,
+	%write('XFF: '),write(XFF),nl,
+	uno(E),
+	YF is Y + E,
+	%write('YF: '),write(YF),nl,
+	YFF is YF + E,
+	%write('YFF: '),write(YFF),nl,
+	YF < 7,
+	YF > 0,
+	get(M, XF, YF, E1),
+	not(ficha(E1)),
+	get(M, XFF, YFF, E2),
+	E2 = '  ',
+	W is XFF *8 + YFF.
+
 come_peon(Z, W) :- 
 	tablero(M),
 	X is div(Z, 8),
