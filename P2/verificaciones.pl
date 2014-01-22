@@ -1,7 +1,7 @@
 blanca('< ').
-blanca('< ').
+blanca('<<').
 negra('> ').
-negra('> ').
+negra('>>').
 
 es_reina('<<').
 es_reina('>>').
@@ -28,6 +28,9 @@ des_peon(X) :-
 	turno,
 	!,
 	X is 1.
+
+uno(1).
+uno(-1).
 
 jugada_valida(Z, W) :-
 	tablero(M),
@@ -85,66 +88,22 @@ jugada_valida_peon(Z, W):-
 jugada_valida_reina(Z, W) :-
 	diagonal(Z, W).
 
-come_peon(Z, W) :-
-	come_blanca_peon(Z, W);
-	come_negra_peon(Z, W).
-
-% Come hacia arriba (X2 > X1; Y2 > Y1)
-come_negra_peon(Z, W) :-
-	X is div(Z, 8) - 1,
-	X > 1,
-	come_negra_aux(Z, W).
-
-come_negra_aux(Z, W) :-
-	YF is mod(Z, 8) + 1,
-	XF is div(Z, 8) - 1,
-	YF < 8,
+% Come
+come_peon(Z, W) :- 
 	tablero(M),
-	get(M, XF, YF, E1),
-	blancas(E1),
-	YFF is YF + 1,
-	get(M, XFF, YFF, E2),
-	E2 = '  ',
-	W is (XFF * 8) + YFF.
-
-come_negra_aux(Z, W) :-
-	YF is mod(Z, 8) - 1,
-	XF is div(Z, 8) - 1,
-	YF > 1,
-	tablero(M),
-	get(M, XF, YF, E1),
-	blancas(E1),
-	YFF is YF - 1,
-	get(M, XFF, YFF, E2),
-	E2 = '  ',
-	W is (XFF * 8) + YFF.
-
-% Come hacia abajo (X2 > X1; Y2 > Y1)
-come_blanca_peon(Z, W) :-
-	X is div(Z, 8) + 1,
-	X < 7,
-	come_blanca_aux(Z, W).
-
-come_blanca_aux(Z, W) :-
-	YF is mod(Z, 8) + 1,
-	XF is div(Z, 8) + 1,
+	X is div(Z, 8),
+	Y is mod(Z, 8),
+	des_peon(N),
+	XF is X + N,
+	XF < 7,
+	XFF is XF + N,
+	uno(E),
+	YF is Y + E,
+	YFF is YF + E,
 	YF < 7,
-	tablero(M),
-	get(M, XF, YF, E1),
-	negras(E1),
-	YFF is YF + 1,
-	get(M, XFF, YFF, E2),
-	E2 = '  ',
-	W is (XFF * 8) + YFF.
-
-come_blanca_aux(Z, W) :-
-	YF is mod(Z, 8) - 1,
-	XF is div(Z, 8) + 1,
 	YF > 0,
-	tablero(M),
 	get(M, XF, YF, E1),
-	negras(E1),
-	YFF is YF - 1,
+	not(ficha(E1)),
 	get(M, XFF, YFF, E2),
 	E2 = '  ',
-	W is (XFF * 8) + YFF.
+	W is XFF *8 + YFF.
