@@ -20,6 +20,15 @@ ficha(F) :-
 	negra(F),
 	!.
 
+not_ficha(F) :-
+	turno,
+	negra(F),
+	!.
+not_ficha(F) :-
+	not(turno),
+	blanca(F),
+	!.
+
 des_peon(X) :- 
 	not(turno),
 	!,
@@ -143,7 +152,7 @@ come_reina(Z, W) :-
 	YF < 7,
 	YF > 0,
 	get(M, XF, YF, E1),
-	not(ficha(E1)),
+	not_ficha(E1),
 	get(M, XFF, YFF, E2),
 	E2 = '  ',
 	W is XFF *8 + YFF.
@@ -168,7 +177,7 @@ come_peon(Z, W) :-
 	YF < 7,
 	YF > 0,
 	get(M, XF, YF, E1),
-	not(ficha(E1)),
+	not_ficha(E1),
 	get(M, XFF, YFF, E2),
 	E2 = '  ',
 	W is XFF *8 + YFF.
