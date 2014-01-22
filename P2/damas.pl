@@ -2,16 +2,17 @@
 :- [imprimir, verificaciones, ai].
 
 tablero([
-	'  ','< ','  ','< ','  ','<<','  ','< ',
-	'< ','  ','< ','  ','<<','  ','< ','  ',
+	'  ','< ','  ','< ','  ','< ','  ','< ',
+	'< ','  ','< ','  ','< ','  ','< ','  ',
 	'  ','< ','  ','< ','  ','< ','  ','< ',
 	'  ','  ','  ','  ','  ','  ','> ','  ',
 	'  ','< ','  ','< ','  ','  ','  ','  ',
-	'> ','  ','> ','  ','>>','  ','> ','  ',
+	'> ','  ','> ','  ','> ','  ','> ','  ',
 	'  ','> ','  ','> ','  ','> ','  ','> ',
-	'> ','  ','> ','  ','>>','  ','> ','  '
+	'> ','  ','> ','  ','> ','  ','> ','  '
 ]).
 
+lvacia([]).
 turno.
 
 get(M, X, E) :-
@@ -32,14 +33,16 @@ cambiar_jugador :-
 	turno,
 	!,
 	retract(turno),
-	write('Juegan las fichas negras (>> | >): ').
+	write('Juegan las fichas negras (>> | >): '),
+	existe_salto.
 
 jugar :-
+	
 	not(juego_init),
 	write('Desea jugar contra la maquina (S/N)? '),
 	read(M),
 	revisar_maquina(M),
-	!,
+	!,	
 	imprimir_tablero,
 	assert(juego_init),
 	cambiar_jugador,
@@ -49,7 +52,16 @@ jugar:-
 	write('Ya inicio un juego.'),
 	!.
 
+existe_salto:-
+	fichas_jugador_actual(L), 
+	saltos_jugador_actual(L,S), 
+	not(maplist(lvacia,S)), 
+	write(' Hay saltos disponibles, elija la ficha: '),
+	nl, 
+	fichas_salto(L,S).
+
 jugada(X1, Y1, X2, Y2) :-
+	
 	juego_init,
 	X1 > 0,
 	X1 < 9,
@@ -61,8 +73,10 @@ jugada(X1, Y1, X2, Y2) :-
 	Y2 < 9,
 	Z is X1*8 + Y1 - 9,
 	W is X2*8 + Y2 - 9,
+	Z1 is Z + 1,
+	W1 is W + 1,
 	jugada_valida(Z, W),
-	procesar_tablero(Z, W).
+	procesar_tablero(Z1, W1).
 
 jugada(_, _, _, _) :-
 	juego_init,
@@ -97,3 +111,14 @@ actualizar_tablero(Z, W, M2) :-
 	tablero(M),
 	reemplazar(M, Z, '  ', M1), 
 	reemplazar(M1, W, F, M2).
+
+fichas_salto([],[]).
+fichas_salto([X|Y],[H|T]):- 
+	(lvacia(H), fichas_salto(Y,T));
+	((not(lvacia(H))),
+	XF is div(X, 8) + 1,
+	YF is mod(X, 8) + 1,
+	write('('),write(XF),tab(1),
+	write(YF),write(')'),tab(1),
+	fichas_salto(Y,T)).
+						
