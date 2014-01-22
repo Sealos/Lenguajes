@@ -75,10 +75,17 @@ jugada(X1, Y1, X2, Y2) :-
 	W is X2*8 + Y2 - 9,
 	Z1 is Z + 1,
 	W1 is W + 1,
-	(come(Z,W));
-	(not(come(Z,W)),
-	jugada_valida(Z, W),
-	procesar_tablero(Z1, W1)).
+	(
+		(
+			come(Z,W)
+		)
+	;
+		(
+			not(come(Z,W)),
+			jugada_valida(Z, W),
+			procesar_tablero(Z1, W1)
+		)
+	).
 
 jugada(_, _, _, _) :-
 	juego_init,
