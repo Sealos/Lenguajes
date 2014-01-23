@@ -40,12 +40,13 @@ cambiar_jugador :-
 	%existe_salto.
 
 jugar :-
-	
 	not(juego_init),
-	write('Desea jugar contra la maquina (S/N)? '),
+	write('Desea jugar contra la maquina (s/n)? '),
 	read(M),
+	write(M),
+	nl,
 	revisar_maquina(M),
-	!,	
+	!,
 	imprimir_tablero,
 	assert(juego_init),
 	cambiar_jugador,

@@ -6,7 +6,7 @@ negra('>>').
 es_reina('<<').
 es_reina('>>').
 
-revisar_maquina('S') :-
+revisar_maquina('s') :-
 	assert(maquina).
 
 revisar_maquina(_).
