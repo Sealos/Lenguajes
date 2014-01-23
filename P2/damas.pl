@@ -161,37 +161,27 @@ procesar_tablero_come(Z,W,XS,YS):-
 	retract(tablero(M)), 
 	assert(tablero(M3)),
 	imprimir_tablero,
-	
-	
-termina_partida:-
 	fichas_otro_jugador(L),
+	termina_partida(L).
+
+termina_partida([]) :-
 	(
-			(
-		
 		(
-			negra(F),
-			L = [], % No hay mas fichas
+			not(turno),
 			write('Gana el jugador 1  '),
 			retract(juego_init)
-		);
+		)
+	;
 		(
-			blanca(F),
-			L = [], % No hay mas fichas
+			turno,
 			write('Gana el jugador 2  '),
 			retract(juego_init)
 			
 		)
-		
-		
-		
-			)
-		;
-		(
-			L \= [],
-			cambiar_jugador
-		)
 	).
-	
+
+termina_partida(_) :-
+	cambiar_jugador.
 
 % Dada una lista, un indice, y un elemento, reemplaza dicho elemento de la lista en el indice dado.	
 reemplazar([_|T], 1, X, [X|T]).
