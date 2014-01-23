@@ -2,15 +2,18 @@
 :- [imprimir, verificaciones, ai].
 
 tablero([
-	'  ','< ','  ','< ','  ','< ','  ','< ',
-	'< ','  ','< ','  ','< ','  ','< ','  ',
-	'  ','< ','  ','< ','  ','< ','  ','< ',
+	'  ','< ','  ','< ','  ','  ','  ','  ',
+	'< ','  ','< ','  ','> ','  ','< ','  ',
+	'  ','< ','  ','< ','  ','> ','  ','< ',
 	'  ','  ','  ','  ','  ','  ','> ','  ',
 	'  ','< ','  ','< ','  ','  ','  ','  ',
-	'> ','  ','> ','  ','> ','  ','> ','  ',
-	'  ','> ','  ','> ','  ','> ','  ','> ',
-	'> ','  ','> ','  ','> ','  ','> ','  '
+	'> ','  ','> ','  ','< ','  ','> ','  ',
+	'  ','> ','  ','> ','  ','< ','  ','> ',
+	'> ','  ','  ','  ','> ','  ','  ','  '
 ]).
+
+casillas_corona_negra([2,4,6,8]).
+casillas_corona_blanca([57,59,61,63]).
 
 lvacia([]).
 turno.
@@ -130,8 +133,26 @@ reemplazar([H|T], I, X, [H|R]) :-
 actualizar_tablero(Z, W, M2) :-
 	ficha(F),
 	tablero(M),
-	reemplazar(M, Z, '  ', M1), 
-	reemplazar(M1, W, F, M2).
+	reemplazar(M, Z, '  ', M1),
+ 
+	(
+	(
+		(
+
+			casillas_corona_negra(R),
+			member(W,R),		
+			reemplazar(M1, W, '>>', M2)
+		)
+	;
+		(
+
+			casillas_corona_blanca(R),
+			member(W,R),
+			reemplazar(M1, W, '<<', M2)
+
+		)
+	);
+	reemplazar(M1 , W , F , M2)).
 
 actualizar_tablero_come(Z, W, XS, YS, M3) :-
 	ficha(F),
@@ -152,4 +173,5 @@ fichas_salto([X|Y],[H|T]):-
 	write('('),write(XF),tab(1),
 	write(YF),write(')'),tab(1),
 	fichas_salto(Y,T)).
-						
+
+	
