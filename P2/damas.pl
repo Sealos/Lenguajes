@@ -26,18 +26,30 @@ get(M, X, Y, E) :-
 	get(M, Z, E).
 
 cambiar_jugador :-
-	not(turno),
-	!,
-	assert(turno),
-	write('Juegan las fichas blancas (<< | <): ').
-	% Si es una maquina jugar la maquina
-	%jugar_maquina.
-cambiar_jugador :-
 	turno,
 	!,
 	retract(turno),
-	write('Juegan las fichas negras (>> | >): ').
-	%existe_salto.
+	write('Juegan las fichas negras (>> | >): '),
+	nl.
+
+cambiar_jugador :-
+	not(turno),
+	!,
+	assert(turno),
+	write('Juegan las fichas blancas (<< | <): '),
+	nl,
+	(
+		(
+			maquina,
+			jugar_maquina(Z, W),
+			jugada(Z, W)
+		)
+	;
+		(
+			not(maquina)
+		)
+	).
+	
 
 jugar :-
 	not(juego_init),
@@ -63,6 +75,21 @@ existe_salto:-
 	write(' Hay saltos disponibles, elija la ficha: '),
 	nl, 
 	fichas_salto(L,S).
+
+jugada(Z, W) :-
+	Z1 is Z + 1,
+	W1 is W + 1,
+	(
+		(
+			come(Z,W)
+		)
+	;
+		(
+			not(come(Z,W)),
+			jugada_valida(Z, W),
+			procesar_tablero(Z1, W1)
+		)
+	).
 
 jugada(X1, Y1, X2, Y2) :-
 	
