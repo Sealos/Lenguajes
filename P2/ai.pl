@@ -25,32 +25,27 @@ jugar_maquina :-
 	saltos_jugador_actual(L, S),
 	obtener_jugadas_disponibles(L, J),
 	jugar_maquina_aux(L, S, J).
+	%jugada(Z, W). %hacer predicado.
 
 jugar_maquina_aux(L, S, _) :-
 	existe_saltos(S),
 	!,
-	primera_jugada(L, S, Z, W),
-	write('Encontre salto, jugando : '),
-	write(Z),write(' '),write(W),nl.
-	%jugada(Z, W). %hacer predicado
+	primera_jugada(L, S, _, _).
 
 jugar_maquina_aux(L, _, J) :-
-	write('No encontre salto : '),nl,
-	write(L),nl,write(J),nl,
 	primera_jugada(L, J, Z, W),
-	write('Encontre movida, jugando : '),
-	write(Z),write(' '),write(W),nl.
-	%jugada(Z, W). % hacer predicado
+	convertir_X_Y(Z, A),
+	convertir_X_Y(W, B),
+	write('Jugada: '),write(A),write(' ->'),write(B).
+	%jugada(Z, W). %hacer predicado.
 
-primera_jugada([H|_], [X|T], Z, W) :-
-	write(H),nl,
-	write(X),nl,
+primera_jugada([H|_], [X|_], Z, W) :-
 	X \= [],
 	!,
 	Z is H,
 	head(X, W).
 
-head([X|_], X).
-
 primera_jugada([_|T], [_|Y], Z, W) :-
 	primera_jugada(T, Y, Z, W).
+
+head([X|_], X).
