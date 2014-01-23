@@ -33,3 +33,11 @@ imprimir_tablero() :- !,
 	write(' '),
 	print_matrix(X, 1, 1),
 	nl.
+% Imprime si un jugador gana
+imprimir_jugador :-
+	turno,
+	!,
+	write('Ha ganado el jugador 2').
+% Imprime si un jugador gana
+imprimir_jugador :-
+	write('Ha ganado el jugador 1').

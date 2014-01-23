@@ -143,15 +143,27 @@ procesar_tablero(Z, W):-
 procesar_tablero_come(Z,W,XS,YS):-
 	tablero(M),
 	%Procesar
+	nl,
 	write('Movimiento: '),
 	nl,
 	actualizar_tablero_come(Z, W, XS, YS, M3),
 	retract(tablero(M)), 
 	assert(tablero(M3)),
 	imprimir_tablero,
-	cambiar_jugador.
+	fichas_otro_jugador(L);
+	(
+		(
+			L = [], % No hay mas fichas
+			imprimir_jugador,
+			retract(juego_init).
+		)
+		;
+		(
+			L \= [],
+			cambiar_jugador
+		)
+	).
 
-	
 reemplazar([_|T], 1, X, [X|T]).
 reemplazar([H|T], I, X, [H|R]) :-
 	I > 1,
