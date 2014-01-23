@@ -29,6 +29,7 @@ cambiar_jugador :-
 	turno,
 	!,
 	retract(turno),
+	existe_salto,
 	write('Juegan las fichas negras (>> | >): '),
 	nl.
 
@@ -150,12 +151,12 @@ procesar_tablero_come(Z,W,XS,YS):-
 	retract(tablero(M)), 
 	assert(tablero(M3)),
 	imprimir_tablero,
-	fichas_otro_jugador(L);
+	fichas_otro_jugador(L),
 	(
 		(
 			L = [], % No hay mas fichas
 			imprimir_jugador,
-			retract(juego_init).
+			retract(juego_init)
 		)
 		;
 		(
