@@ -1,7 +1,8 @@
-blanca('< ').
 blanca('<<').
-negra('> ').
+blanca('< ').
 negra('>>').
+negra('> ').
+
 
 es_reina('<<').
 es_reina('>>').

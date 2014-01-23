@@ -29,9 +29,9 @@ cambiar_jugador :-
 	not(turno),
 	!,
 	assert(turno),
-	write('Juegan las fichas blancas (<< | <): '),
+	write('Juegan las fichas blancas (<< | <): ').
 	% Si es una maquina jugar la maquina
-	jugar_maquina.
+	%jugar_maquina.
 cambiar_jugador :-
 	turno,
 	!,
@@ -131,8 +131,8 @@ reemplazar([H|T], I, X, [H|R]) :-
 	reemplazar(T, I1, X, R).
 
 actualizar_tablero(Z, W, M2) :-
-	ficha(F),
 	tablero(M),
+	get(M, W, F),
 	reemplazar(M, Z, '  ', M1),
  
 	(
@@ -140,7 +140,7 @@ actualizar_tablero(Z, W, M2) :-
 		(
 
 			casillas_corona_negra(R),
-			member(W,R),		
+			member(W,R),
 			reemplazar(M1, W, '>>', M2)
 		)
 	;
@@ -155,8 +155,8 @@ actualizar_tablero(Z, W, M2) :-
 	reemplazar(M1 , W , F , M2)).
 
 actualizar_tablero_come(Z, W, XS, YS, M3) :-
-	ficha(F),
 	tablero(M),
+	get(M, W, F),
 	C is XS*8 + YS - 9,
 	C1 is C + 1,
 	reemplazar(M, Z, '  ', M1), 
@@ -173,5 +173,3 @@ fichas_salto([X|Y],[H|T]):-
 	write('('),write(XF),tab(1),
 	write(YF),write(')'),tab(1),
 	fichas_salto(Y,T)).
-
-	
