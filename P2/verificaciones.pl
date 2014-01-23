@@ -234,14 +234,14 @@ come_buscar(Z, W) :-
 	get(M, Z, E),
 	es_reina(E),
 	!,
-	come_reina(Z, W).
+	come_reina_buscar(Z, W).
 
 come_buscar(Z, W) :-
 	tablero(M),
 	get(M, Z, E),
 	not(es_reina(E)),
 	!,
-	come_peon(Z, W).
+	come_peon_buscar(Z, W).
 
 come_reina(Z, W) :-
 	tablero(M),

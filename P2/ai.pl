@@ -20,24 +20,23 @@ existe_saltos([H|Y]) :-
 	existe_saltos(Y).
 existe_saltos([_|_]) :- !.
 
-jugar_maquina :-
+jugar_maquina(Z, W) :-
 	fichas_jugador_actual(L),
 	saltos_jugador_actual(L, S),
 	obtener_jugadas_disponibles(L, J),
-	jugar_maquina_aux(L, S, J).
-	%jugada(Z, W). %hacer predicado.
-
-jugar_maquina_aux(L, S, _) :-
-	existe_saltos(S),
-	!,
-	primera_jugada(L, S, _, _).
-
-jugar_maquina_aux(L, _, J) :-
-	primera_jugada(L, J, Z, W),
+	jugar_maquina_aux(L, S, J, Z, W),
 	convertir_X_Y(Z, A),
 	convertir_X_Y(W, B),
 	write('Jugada: '),write(A),write(' ->'),write(B).
 	%jugada(Z, W). %hacer predicado.
+
+jugar_maquina_aux(L, S, _, Z, W) :-
+	existe_saltos(S),
+	!,
+	primera_jugada(L, S, Z, W).
+
+jugar_maquina_aux(L, _, J, Z, W) :-
+	primera_jugada(L, J, Z, W).
 
 primera_jugada([H|_], [X|_], Z, W) :-
 	X \= [],
