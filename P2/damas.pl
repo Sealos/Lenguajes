@@ -32,7 +32,6 @@ cambiar_jugador :-
 	turno,
 	!,
 	retract(turno),
-	existe_salto,
 	write('Juegan las fichas negras (>> | >): '),
 	nl.
 
@@ -162,19 +161,37 @@ procesar_tablero_come(Z,W,XS,YS):-
 	retract(tablero(M)), 
 	assert(tablero(M3)),
 	imprimir_tablero,
-	fichas_otro_jugador(L);
+	
+	
+termina_partida:-
+	fichas_otro_jugador(L),
 	(
+			(
+		
 		(
+			negra(F),
 			L = [], % No hay mas fichas
-			imprimir_jugador,
+			write('Gana el jugador 1  '),
 			retract(juego_init)
+		);
+		(
+			blanca(F),
+			L = [], % No hay mas fichas
+			write('Gana el jugador 2  '),
+			retract(juego_init)
+			
 		)
+		
+		
+		
+			)
 		;
 		(
 			L \= [],
 			cambiar_jugador
 		)
 	).
+	
 
 % Dada una lista, un indice, y un elemento, reemplaza dicho elemento de la lista en el indice dado.	
 reemplazar([_|T], 1, X, [X|T]).
