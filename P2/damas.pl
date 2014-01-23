@@ -1,6 +1,7 @@
 :- dynamic juego_init/0, turno/0, maquina/0, tablero/1, tablero/0.
 :- [imprimir, verificaciones, ai].
 
+% Tablero Inicial
 tablero([
 	'  ','< ','  ','< ','  ','< ','  ','< ',
 	'< ','  ','< ','  ','< ','  ','< ','  ',
@@ -18,6 +19,7 @@ casillas_corona_blanca([57,59,61,63]).
 lvacia([]).
 turno.
 
+% Devuelve el elemento que se encuentra en el indice X
 get(M, X, E) :-
 	nth0(X, M, E).
 
@@ -25,6 +27,7 @@ get(M, X, Y, E) :-
 	Z is (X * 8) + Y,
 	get(M, Z, E).
 
+% Cambia el turno y ficha del jugador de fichas negras
 cambiar_jugador :-
 	turno,
 	!,
@@ -33,6 +36,7 @@ cambiar_jugador :-
 	write('Juegan las fichas negras (>> | >): '),
 	nl.
 
+% Cambia el turno y ficha del jugador de fichas blancas
 cambiar_jugador :-
 	not(turno),
 	!,
@@ -51,7 +55,7 @@ cambiar_jugador :-
 		)
 	).
 	
-
+% Inicia el juego
 jugar :-
 	not(juego_init),
 	write('Desea jugar contra la maquina (s/n)? '),
@@ -65,10 +69,12 @@ jugar :-
 	cambiar_jugador,
 	nl.
 
+% El juego ya esta iniciado
 jugar:-
 	write('Ya inicio un juego.'),
 	!.
 
+% Verifica si existe salto y provee las fichas disponibles para realizarlo.
 existe_salto:-
 	fichas_jugador_actual(L), 
 	saltos_jugador_actual(L,S), 
@@ -77,6 +83,7 @@ existe_salto:-
 	nl, 
 	fichas_salto(L,S).
 
+% Recibe la coordenada inicial y final de ficha en terminos del desplazamiento lineal (Tablero como una lista).
 jugada(Z, W) :-
 	Z1 is Z + 1,
 	W1 is W + 1,
@@ -91,7 +98,7 @@ jugada(Z, W) :-
 			procesar_tablero(Z1, W1)
 		)
 	).
-
+% Recibe la coordenada inicial y final de la ficha para jugar.
 jugada(X1, Y1, X2, Y2) :-
 	
 	juego_init,
@@ -119,16 +126,19 @@ jugada(X1, Y1, X2, Y2) :-
 		)
 	).
 
+% Indica jugada invalida
 jugada(_, _, _, _) :-
 	juego_init,
 	write('Jugada invalida, intente nuevamente.'),
 	nl.
 
+% Caso de usar el predicado jugada antes del predicado jugar.
 jugada(_,_,_,_) :- !,
 	not(juego_init),
 	write('No ha iniciado el juego, inicie con jugar'),
 	nl.
-
+	
+% Preparacion para actualizar el tablero antes y despues de una jugada.
 procesar_tablero(Z, W):-
 	tablero(M),
 	%Procesar
@@ -141,6 +151,7 @@ procesar_tablero(Z, W):-
 	imprimir_tablero,
 	cambiar_jugador.
 
+% Preparacion para actualizar el tablero antes y despues de un salto.
 procesar_tablero_come(Z,W,XS,YS):-
 	tablero(M),
 	%Procesar
@@ -151,7 +162,7 @@ procesar_tablero_come(Z,W,XS,YS):-
 	retract(tablero(M)), 
 	assert(tablero(M3)),
 	imprimir_tablero,
-	fichas_otro_jugador(L),
+	fichas_otro_jugador(L);
 	(
 		(
 			L = [], % No hay mas fichas
@@ -165,12 +176,14 @@ procesar_tablero_come(Z,W,XS,YS):-
 		)
 	).
 
+% Dada una lista, un indice, y un elemento, reemplaza dicho elemento de la lista en el indice dado.	
 reemplazar([_|T], 1, X, [X|T]).
 reemplazar([H|T], I, X, [H|R]) :-
 	I > 1,
 	I1 is I-1, 
 	reemplazar(T, I1, X, R).
 
+% Refleja en el tablero la jugada hecha actualmente.
 actualizar_tablero(Z, W, M2) :-
 	tablero(M),
 	Z1 is Z-1,
@@ -196,6 +209,7 @@ actualizar_tablero(Z, W, M2) :-
 	);
 	reemplazar(M1 , W , F , M2)).
 
+% Refleja en el tablero el salto hecho actualmente.
 actualizar_tablero_come(Z, W, XS, YS, M3) :-
 	tablero(M),
 	Z1 is Z-1,
@@ -206,7 +220,8 @@ actualizar_tablero_come(Z, W, XS, YS, M3) :-
 	reemplazar(M1, W, F, M2),
 	reemplazar(M2, C1,'  ',M3).
 
-
+% Dada una lista de fichas, y otra con las casillas despues de hacer un salto
+% imprime en pantalla la lista de fichas que pueden comer actualmente.
 fichas_salto([],[]).
 fichas_salto([X|Y],[H|T]):- 
 	(lvacia(H), fichas_salto(Y,T));
