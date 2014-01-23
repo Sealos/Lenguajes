@@ -56,7 +56,7 @@ fichas_jugador_actual(L) :-
 	append(L1, L2, L).
 
 obtener_saltos(Z, LW) :-
-	findall(X, come(Z, X), LW).
+	findall(X, come_buscar(Z, X), LW).
 
 saltos_jugador_actual(L, S) :-
 	maplist(obtener_saltos, L, S).
@@ -229,6 +229,20 @@ come(Z, W) :-
 	!,
 	come_peon(Z, W).
 
+come_buscar(Z, W) :-
+	tablero(M),
+	get(M, Z, E),
+	es_reina(E),
+	!,
+	come_reina(Z, W).
+
+come_buscar(Z, W) :-
+	tablero(M),
+	get(M, Z, E),
+	not(es_reina(E)),
+	!,
+	come_peon(Z, W).
+
 come_reina(Z, W) :-
 	tablero(M),
 	X is div(Z, 8),
@@ -252,7 +266,12 @@ come_reina(Z, W) :-
 	not_ficha(E1),
 	get(M, XFF, YFF, E2),
 	E2 = '  ',
-	W is XFF *8 + YFF.
+	W is XFF *8 + YFF,
+	Z1 is Z + 1,
+	W1 is W + 1,
+	XF1 is XF+1,
+	YF1 is YF+1,
+	procesar_tablero_come(Z1, W1, XF1, YF1).
 
 come_peon(Z, W) :- 
 	tablero(M),
@@ -283,3 +302,53 @@ come_peon(Z, W) :-
 	XF1 is XF+1,
 	YF1 is YF+1,
 	procesar_tablero_come(Z1, W1, XF1, YF1).
+
+come_reina_buscar(Z, W) :-
+	tablero(M),
+	X is div(Z, 8),
+	%write('X: '),write(X),nl,
+	Y is mod(Z, 8),
+	%write('Y: '),write(Y),nl,
+	uno(N),
+	XF is X + N,
+	%write('XF: '),write(XF),nl,
+	XF < 7,
+	XFF is XF + N,
+	%write('XFF: '),write(XFF),nl,
+	uno(E),
+	YF is Y + E,
+	%write('YF: '),write(YF),nl,
+	YFF is YF + E,
+	%write('YFF: '),write(YFF),nl,
+	YF < 7,
+	YF > 0,
+	get(M, XF, YF, E1),
+	not_ficha(E1),
+	get(M, XFF, YFF, E2),
+	E2 = '  ',
+	W is XFF *8 + YFF.
+
+come_peon_buscar(Z, W) :- 
+	tablero(M),
+	X is div(Z, 8),
+	%write('X: '),write(X),nl,
+	Y is mod(Z, 8),
+	%write('Y: '),write(Y),nl,
+	des_peon(N),
+	XF is X + N,
+	%write('XF: '),write(XF),nl,
+	XF < 7,
+	XFF is XF + N,
+	%write('XFF: '),write(XFF),nl,
+	uno(E),
+	YF is Y + E,
+	%write('YF: '),write(YF),nl,
+	YFF is YF + E,
+	%write('YFF: '),write(YFF),nl,
+	YF < 7,
+	YF > 0,
+	get(M, XF, YF, E1),
+	not_ficha(E1),
+	get(M, XFF, YFF, E2),
+	E2 = '  ',
+	W is XFF *8 + YFF.
