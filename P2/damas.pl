@@ -31,6 +31,7 @@ cambiar_jugador :-
 	retract(turno),
 	write('Juegan las fichas negras (>> | >): '),
 	nl.
+
 cambiar_jugador :-
 	not(turno),
 	!,
@@ -47,7 +48,7 @@ cambiar_jugador :-
 		(
 			not(maquina)
 		)
-	),
+	).
 	
 
 jugar :-

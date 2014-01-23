@@ -27,8 +27,7 @@ jugar_maquina(Z, W) :-
 	jugar_maquina_aux(L, S, J, Z, W),
 	convertir_X_Y(Z, A),
 	convertir_X_Y(W, B),
-	write('Jugada: '),write(A),write(' ->'),write(B).
-	%jugada(Z, W). %hacer predicado.
+	write('Jugada maquina: '),write(A),write(' ->'),write(B),nl.
 
 jugar_maquina_aux(L, S, _, Z, W) :-
 	existe_saltos(S),
