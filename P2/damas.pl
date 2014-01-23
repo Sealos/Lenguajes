@@ -133,7 +133,8 @@ reemplazar([H|T], I, X, [H|R]) :-
 
 actualizar_tablero(Z, W, M2) :-
 	tablero(M),
-	get(M, W, F),
+	Z1 is Z-1,
+	get(M, Z1, F),
 	reemplazar(M, Z, '  ', M1),
  
 	(
@@ -157,7 +158,8 @@ actualizar_tablero(Z, W, M2) :-
 
 actualizar_tablero_come(Z, W, XS, YS, M3) :-
 	tablero(M),
-	get(M, W, F),
+	Z1 is Z-1,
+	get(M, Z, F),
 	C is XS*8 + YS - 9,
 	C1 is C + 1,
 	reemplazar(M, Z, '  ', M1), 
