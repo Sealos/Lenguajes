@@ -8,5 +8,8 @@ class Tapadora < Maquina
 		@estado = 0
 		@capacidad = 50
 		@porcentaje_uno = 1
+		@nombre_maquina = "Llenadora y Tapadora"
+		@nombre_insumo_uno = "Producto Maquina Anterior"
+		@insumo_uno = 0
 	end
 end
