@@ -1,3 +1,14 @@
-dir = "/path/to/directory"
-$LOAD_PATH.unshift(dir)
-Dir["/path/to/directory/*.rb"].each {|file| load file }
+require './TanqueCerveza'
+require './Tapadora'
+require './Silo'
+require './PailaCoccion'
+require './TCC'
+require './Enfirador'
+require './Molino'
+require './CubaFiltracion'
+require './Filtro'
+require './TanqueClarificador'
+require './PailaMezla'
+
+puts "Hola"
+
