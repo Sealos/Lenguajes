@@ -18,8 +18,9 @@ class Recursos
 			@cebada = @cebada - monto
 			return monto
 		else
+			monto = @cebada
 			@cebada = 0
-			return cebada
+			return monto
 		end
 	end
 
@@ -28,8 +29,9 @@ class Recursos
 			@lupulo = @lupulo - monto
 			return monto
 		else
+			monto = @lupulo
 			@lupulo = 0
-			return lupulo
+			return monto
 		end
 	end
 
@@ -38,8 +40,9 @@ class Recursos
 			@levadura = @levadura - monto
 			return monto
 		else
+			monto = @levadura
 			@levadura = 0
-			return levadura
+			return monto
 		end
 	end
 
@@ -48,8 +51,9 @@ class Recursos
 			@arroz = @arroz - monto
 			return monto
 		else
+			monto = @arroz
 			@arroz = 0
-			return arroz
+			return monto
 		end
 	end
 end

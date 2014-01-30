@@ -13,4 +13,29 @@ class Tapadora < Maquina
 		@insumo_uno = 0
 		@almacen = 0
 	end
+
+	def resultado
+		temp = @almacen
+		@almacen = 0
+		return temp
+	end
+
+	def procesar
+		if @ciclo_actual == 0
+			# Si esta aqui, almacen = 0
+			@almacen = @insumo_uno
+			unless @nombre_insumo_dos.nil?
+				@almacen += @insumo_dos
+			end
+			# Le restamos el descho
+			@almacen = @almacen * (1 - @desecho)
+			@almacen *= 4
+			puts "Cervezas salientes: " + @almacen.to_s
+			@insumo_uno = 0
+			@insumo_dos = 0
+			@estado = 0
+		else
+			@ciclo_actual = @ciclo_actual - 1
+		end
+	end
 end

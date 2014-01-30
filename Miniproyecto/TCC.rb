@@ -18,4 +18,8 @@ class TCC < Maquina
 		@recursos = recursos
 		@almacen = 0
 	end
+
+	def cargar_insumo;
+		@insumo_dos = @recursos.enviar_levadura(@capacidad * @porcentaje_dos)
+	end
 end

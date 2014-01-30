@@ -18,4 +18,8 @@ class PailaCoccion < Maquina
 		@recursos = recursos
 		@almacen = 0
 	end
+
+	def cargar_insumo;
+		@insumo_dos = @recursos.enviar_lupulo(@capacidad * @porcentaje_dos)
+	end
 end

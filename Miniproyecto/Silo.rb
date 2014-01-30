@@ -16,7 +16,7 @@ class Silo < Maquina
 		@almacen = 0
 	end
 
-	def cargar_insumo
-
+	def cargar_insumo;
+		@insumo_uno = @recursos.enviar_cebada(@capacidad * @porcentaje_uno)
 	end
 end
