@@ -2,6 +2,7 @@ require './Maquina'
 
 # Filtro de Cerveza
 class Filtro < Maquina
+	# Constructor
 	def initialize(prox)
 		@desecho = 0
 		@ciclos_procesamiento = 1

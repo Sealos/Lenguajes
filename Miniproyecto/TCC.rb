@@ -2,6 +2,7 @@ require './Maquina'
 
 # TCC
 class TCC < Maquina
+	# Constructor
 	def initialize(prox, recursos)
 		@desecho = 0.1
 		@ciclos_procesamiento = 10
@@ -19,6 +20,7 @@ class TCC < Maquina
 		@almacen = 0
 	end
 
+	# Cargamos la levadura necesaria
 	def cargar_insumo;
 		@insumo_dos = @recursos.enviar_levadura(@capacidad * @porcentaje_dos)
 	end

@@ -2,6 +2,7 @@ require './Maquina'
 
 # Llenadora y tapadora
 class Tapadora < Maquina
+	# Constructor
 	def initialize
 		@desecho = 0
 		@ciclos_procesamiento = 2
@@ -14,12 +15,15 @@ class Tapadora < Maquina
 		@almacen = 0
 	end
 
+	# Obtenemos el resultado
 	def resultado
 		temp = @almacen
 		@almacen = 0
 		return temp
 	end
 
+	# Dado que esta maquina no tiene que esperar por ninguna otra para
+	# que reciba su producto, no tiene ciclo de espera
 	def procesar
 		if @ciclo_actual == 0
 			# Si esta aqui, almacen = 0

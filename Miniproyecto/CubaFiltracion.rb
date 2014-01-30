@@ -2,6 +2,7 @@ require './Maquina'
 
 # Cuba de filtracion
 class CubaFiltracion < Maquina
+	#Constructor
 	def initialize(prox)
 		@desecho = 0.35
 		@ciclos_procesamiento = 2

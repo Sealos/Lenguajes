@@ -2,6 +2,7 @@ require './Maquina'
 
 # Tanque pre-clarificador
 class TanqueClarificador < Maquina
+	# Constructor
 	def initialize(prox)
 		@desecho = 0.01
 		@ciclos_procesamiento = 1

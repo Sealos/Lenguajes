@@ -1,6 +1,8 @@
 require './Maquina'
 
+# Clase de la maquina Silo
 class Silo < Maquina
+	# Inicializamos la clase
 	def initialize(prox, recursos)
 		@desecho = 0
 		@ciclos_procesamiento = 0
@@ -13,9 +15,9 @@ class Silo < Maquina
 		@insumo_uno = 0
 		@proxima_maquina = prox
 		@recursos = recursos
-		@almacen = 0
 	end
 
+	# Cargamos la cebada
 	def cargar_insumo;
 		@insumo_uno = @recursos.enviar_cebada(@capacidad * @porcentaje_uno)
 	end

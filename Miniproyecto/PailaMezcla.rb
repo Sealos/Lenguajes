@@ -2,6 +2,7 @@ require './Maquina'
 
 # Paila de mezla
 class PailaMezcla < Maquina
+	# Constructor
 	def initialize(prox, recursos)
 		@desecho = 0
 		@ciclos_procesamiento = 2
@@ -19,6 +20,7 @@ class PailaMezcla < Maquina
 		@almacen = 0
 	end
 
+	# Carga la mezcla de arroz/maiz
 	def cargar_insumo;
 		@insumo_dos = @recursos.enviar_arroz(@capacidad * @porcentaje_dos)
 	end

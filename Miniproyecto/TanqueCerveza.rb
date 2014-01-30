@@ -2,6 +2,7 @@ require './Maquina'
 
 # Tanque para cerveza filtrada
 class TanqueCerveza < Maquina
+	# Constructor
 	def initialize(prox)
 		@desecho = 0
 		@ciclos_procesamiento = 0

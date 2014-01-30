@@ -1,5 +1,7 @@
+# Clase principal, encargada de los ciclos y el manejo de cada maquina
+# asi como tambien la interaccion con las otras maquinas
 class Maquina
-
+	# Constructor
 	def initialize
 		@desecho = 0
 		@ciclos_procesamiento = 0
@@ -15,13 +17,14 @@ class Maquina
 		@nombre_maquina = "Default"
 		@nombre_insumo_uno = "Default"
 		@nombre_insumo_dos = "Default"
-		@almacen = 0
 	end
 
+	# Getter del estado de la maquina
 	def estado
 		@estado
 	end
 
+	# Simula un ciclo de procesamiento
 	def procesar
 		if @ciclo_actual == 0
 			# Si esta aqui, almacen = 0
@@ -40,6 +43,7 @@ class Maquina
 		end
 	end
 
+	# Imprime el reporte de la maquina
 	def imprimir_estado
 		puts "\tMaquina: " + @nombre_maquina + "\n"
 		case @estado
@@ -60,13 +64,21 @@ class Maquina
 			unless @nombre_insumo_dos.nil?
 				puts "\t\t\t" + @nombre_insumo_dos + ": " + @insumo_dos.to_s
 			end
-			#if @estado == 3
-			#	puts "\t\t\tAlmacen: " + @almacen.to_s
-			#end
+			if @estado == 3
+				puts "\t\tProducto almacenado: " + @almacen.to_s
+			end
 		end
 		puts ""
 	end
 
+	# Simula el ciclo, y dependiendo del estado de la maquina hace lo
+	# siguiente:
+	# -0: Carga insumos basicos y espera por los productos de las otras
+	# -1: La maquina esta llena, coloca los ciclos de procesamiento al
+	#	  predeterminado de la maquina
+	# -2: Procesa los insumos
+	# -3: Envia los insumos, y si los envio por completo, pasa al estado
+	#	  inactivo
 	def ciclo
 		self.imprimir_estado
 		case @estado
@@ -96,11 +108,13 @@ class Maquina
 		end
 	end
 
+	# Por las maquinas que no usan insumos
 	def cargar_insumo;
 		
 	end
 
-
+	# Verifica si la proxima maquina en la cadena esta disponible para
+	# recibir los productos
 	def verificar_proxima_maquina
 		if @proxima_maquina.estado == 0
 			#puts "--- Intentando enviar " + @almacen.to_s
@@ -113,6 +127,7 @@ class Maquina
 		end
 	end
 
+	# Recibe los insumos de la maquina anterior
 	def recibir_insumo(cantidad)
 		if (@insumo_uno + cantidad) > (@capacidad * @porcentaje_uno)
 			temp = @capacidad * @porcentaje_uno - @insumo_uno

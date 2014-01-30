@@ -1,3 +1,6 @@
+
+# Clase que tiene los recursos necesarios y que va distribuyendo a las
+# maquinas que lo necesiten
 class Recursos
 	def initialize(cebada, lupulo, levadura, arroz)
 		@cebada = cebada.to_i
@@ -6,6 +9,7 @@ class Recursos
 		@arroz = arroz.to_i
 	end
 
+	# Reporte de recursos
 	def imprimir_insumos
 		puts "Cebada Sobrante: " + @cebada.to_s
 		puts "Lupulo Sobrante: " + @lupulo.to_s
@@ -13,6 +17,7 @@ class Recursos
 		puts "Mezcla de Arroz/Maiz Sobrante: " + @arroz.to_s
 	end
 
+	# Envia la cebada al silo
 	def enviar_cebada(monto)
 		if @cebada > monto
 			@cebada = @cebada - monto
@@ -24,6 +29,7 @@ class Recursos
 		end
 	end
 
+	# Envia el lupulo a la Paila de Coccion
 	def enviar_lupulo(monto)
 		if @lupulo > monto
 			@lupulo = @lupulo - monto
@@ -35,6 +41,7 @@ class Recursos
 		end
 	end
 
+	# Envia la levadura al TCC
 	def enviar_levadura(monto)
 		if @levadura > monto
 			@levadura = @levadura - monto
@@ -46,6 +53,7 @@ class Recursos
 		end
 	end
 
+	# Envia la mezcla de arroz/maiz a la Paila de Mezcla
 	def enviar_arroz(monto)
 		if @arroz > monto
 			@arroz = @arroz - monto

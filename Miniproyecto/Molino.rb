@@ -1,6 +1,7 @@
 require './Maquina'
-
+# Molino
 class Molino < Maquina
+	# Constructor
 	def initialize(prox)
 		@desecho = 0.02
 		@ciclos_procesamiento = 1

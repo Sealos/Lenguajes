@@ -2,6 +2,7 @@ require './Maquina'
 
 # Paila de coccion
 class PailaCoccion < Maquina
+	# Constructor
 	def initialize(prox, recursos)
 		@desecho = 0.1
 		@ciclos_procesamiento = 3
@@ -19,6 +20,7 @@ class PailaCoccion < Maquina
 		@almacen = 0
 	end
 
+	# Carga el lupulo necesario
 	def cargar_insumo;
 		@insumo_dos = @recursos.enviar_lupulo(@capacidad * @porcentaje_dos)
 	end

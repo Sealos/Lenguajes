@@ -1,6 +1,8 @@
 require './Maquina'
 
+# Enfriador
 class Enfriador < Maquina
+	# Constructor
 	def initialize(prox)
 		@desecho = 0
 		@ciclos_procesamiento = 2
