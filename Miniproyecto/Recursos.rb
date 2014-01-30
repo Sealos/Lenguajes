@@ -1,16 +1,16 @@
 class Recursos
 	def initialize(cebada, lupulo, levadura, arroz)
-		@cebada = cebada
-		@lupulo = lupulo
-		@levadura = levadura
-		@arroz = arroz
+		@cebada = cebada.to_i
+		@lupulo = lupulo.to_i
+		@levadura = levadura.to_i
+		@arroz = arroz.to_i
 	end
 
 	def imprimir_insumos
-		puts "Cebada Sobrante: " + @cebada
-		puts "Lupulo Sobrante: " + @lupulo
-		puts "Levadura Sobrante: " + @levadura
-		puts "Mezcla Arroz Maiz Sobrante: " + @arroz
+		puts "Cebada Sobrante: " + @cebada.to_s
+		puts "Lupulo Sobrante: " + @lupulo.to_s
+		puts "Levadura Sobrante: " + @levadura.to_s
+		puts "Mezcla de Arroz/Maiz Sobrante: " + @arroz.to_s
 	end
 
 	def enviar_cebada(monto)

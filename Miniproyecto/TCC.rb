@@ -2,7 +2,7 @@ require './Maquina'
 
 # TCC
 class TCC < Maquina
-	def initialize(prox)
+	def initialize(prox, recursos)
 		@desecho = 0.1
 		@ciclos_procesamiento = 10
 		@estado = 0
@@ -15,5 +15,7 @@ class TCC < Maquina
 		@insumo_uno = 0
 		@insumo_dos = 0
 		@proxima_maquina = prox
+		@recursos = recursos
+		@almacen = 0
 	end
 end

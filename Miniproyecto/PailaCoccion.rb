@@ -16,5 +16,6 @@ class PailaCoccion < Maquina
 		@insumo_dos = 0
 		@proxima_maquina = prox
 		@recursos = recursos
+		@almacen = 0
 	end
 end

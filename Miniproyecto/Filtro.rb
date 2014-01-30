@@ -12,5 +12,6 @@ class Filtro < Maquina
 		@nombre_insumo_uno = "Producto Maquina Anterior"
 		@insumo_uno = 0
 		@proxima_maquina = prox
+		@almacen = 0
 	end
 end

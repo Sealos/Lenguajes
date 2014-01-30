@@ -6,6 +6,7 @@ class Maquina
 		@ciclo_actual = 0
 		@estado = 0
 		@capacidad = 0
+		@almacen = 0
 		@insumo_uno = 0
 		@insumo_dos = 0
 		@porcentaje_uno = 0
@@ -14,6 +15,7 @@ class Maquina
 		@nombre_maquina = "Default"
 		@nombre_insumo_uno = "Default"
 		@nombre_insumo_dos = "Default"
+		@almacen = 0
 	end
 
 	def estado
@@ -29,26 +31,27 @@ class Maquina
 	end
 
 	def imprimir_estado
-		puts "Maquina: " + @nombre_maquina + "\n"
+		puts "\tMaquina: " + @nombre_maquina + "\n"
 		case @estado
 		when 0
-			@s =  "Inactiva\n"
+			@s =  "Inactiva"
 		when 1
-			@s = "Llena\n"
+			@s = "Llena"
 		when 2
-			@s = "Procesando\n"
+			@s = "Procesando"
 		when 3
-			@s = "En espera\n"
+			@s = "En espera"
 		end
-		puts "Estado: " + @s
+		puts "\t\tEstado: " + @s
 		if @estado  == 0 || @estado == 3
-			puts "Insumos:"
-			@s = @nombre_insumo_uno + " " + @insumo_uno.to_s
+			puts "\t\tInsumos:"
+			@s = "\t\t\t" + @nombre_insumo_uno + ": " + @insumo_uno.to_s
 			puts @s
 			unless @insumo_dos.nil?
-				puts @nombre_insumo_dos + " " + @insumo_dos.to_s
+				puts "\t\t\t" + @nombre_insumo_dos + ": " + @insumo_dos.to_s
 			end
 		end
+		puts ""
 	end
 
 	def ciclo
@@ -80,6 +83,10 @@ class Maquina
 			proxima_maquina.recibir_insumo
 			@estado = 0
 		end
+	end
+
+	def recibir_insumo(cantidad)
+		
 	end
 
 end

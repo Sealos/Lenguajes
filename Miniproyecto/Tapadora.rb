@@ -11,5 +11,6 @@ class Tapadora < Maquina
 		@nombre_maquina = "Llenadora y Tapadora"
 		@nombre_insumo_uno = "Producto Maquina Anterior"
 		@insumo_uno = 0
+		@almacen = 0
 	end
 end
